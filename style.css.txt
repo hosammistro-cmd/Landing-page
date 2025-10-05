@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DentNord - Digital Dental Solutions</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>DentNord</h1>
+    <nav>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#upload">Upload Files</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero">
+    <h2>Digital Solutions for Modern Dentistry</h2>
+    <p>Innovative, compliant, and patient-focused designs for dental professionals.</p>
+    <a href="#upload" class="btn">Upload Files</a>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <h2>About Us</h2>
+    <p>DentNord provides digital dental design services for clinics and labs across Europe. 
+       Our platform enables dentists to upload scans and imaging, and quickly receive 
+       high-quality STL files for crowns, bridges, surgical guides, and more.</p>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services">
+    <h2>Our Services</h2>
+    <div class="service-grid">
+      <div class="service">
+        <h3>3D Design</h3>
+        <p>Custom STL designs for crowns, bridges, and prosthetics.</p>
+      </div>
+      <div class="service">
+        <h3>Surgical Guides</h3>
+        <p>Precise guides for safe and efficient implant placement.</p>
+      </div>
+      <div class="service">
+        <h3>File Management</h3>
+        <p>Upload, store, and retrieve patient STL files securely.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Upload Section -->
+  <section id="upload">
+    <h2>Upload Files</h2>
+    <p>Upload your STL, DICOM, or 3D scan files securely. We’ll process them and send back the design.</p>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="text" name="doctor" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email" required>
+      <input type="file" name="file" accept=".stl,.dicom,.zip" required>
+      <button type="submit" class="btn">Upload</button>
+    </form>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <form>
+      <input type="text" placeholder="Your Name" required>
+      <input type="email" placeholder="Your Email" required>
+      <textarea placeholder="Your Message" required></textarea>
+      <button type="submit" class="btn">Send Message</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 DentNord. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>

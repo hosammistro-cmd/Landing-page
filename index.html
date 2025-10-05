@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DentNord - Digital Dental Solutions</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- Header -->
+<header style="background: #fffdfd; padding: 20px 0;">
+    <h1 style="color: #120120; text-align: center; margin-bottom: 10px;">DentNord Design</h1>
+    <nav>
+        <ul style="display: flex; justify-content: center; gap: 40px; list-style: none; margin: 0; padding: 0;">
+            <li>
+                <a href="about.html" style="color: #0c0c0c; text-decoration: none; font-size: 1.1em; display: flex; align-items: center;">
+                    <span style="color: #0f0; margin-right: 8px;">&#10003;</span> About
+                </a>
+            </li>
+            <li>
+                <a href="services.html" style="color: #090909; text-decoration: none; font-size: 1.1em; display: flex; align-items: center;">
+                    <span style="color: #0f0; margin-right: 8px;">&#10003;</span> Services
+                </a>
+            </li>
+            <li>
+                <a href="contact.html" style="color: #0d0c0c; text-decoration: none; font-size: 1.1em; display: flex; align-items: center;">
+                    <span style="color: #0f0; margin-right: 8px;">&#10003;</span> Contact
+                </a>
+            </li>
+            <li>
+                <a href="upload.html" style="color: #060606; text-decoration: none; font-size: 1.1em; display: flex; align-items: center;">
+                    <span style="color: #0f0; margin-right: 8px;">&#10003;</span> Upload Files
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+  <!-- Hero Section -->
+  <section id="hero">
+    <h2>Digital Solutions for Modern Dentistry</h2>
+    <p>Innovative, compliant, and patient-focused designs for dental professionals.</p>
+  
+  </section>
+
+  <!-- About Section -->
+<section id="about">
+  <h2>About Us</h2>
+  <p>
+    At <strong>DentNord</strong>, we specialize in bringing digital technology into modern dentistry.  
+    Our focus is on precision, innovation, and supporting dentists with advanced digital solutions.  
+  </p>
+  <p>
+    With expertise in <em>implant planning, surgical guides, and digital workflows</em>, we help clinics 
+    improve treatment outcomes and patient satisfaction. Our goal is to make dentistry more predictable, 
+    efficient, and accessible with state-of-the-art tools.
+  </p>
+</section>
+
+
+  <!-- Services Section -->
+  <section id="services">
+  <h2>Our Services</h2>
+  <ul>
+    <li>
+      <strong>Digital Implant Planning</strong> – Accurate 3D planning for predictable implant placement 
+      using the latest imaging and software tools.
+    </li>
+    <li>
+      <strong>Surgical Guide Design</strong> – Custom-designed guides that ensure safe, precise, and 
+      minimally invasive implant surgery.
+    </li>
+    <li>
+      <strong>Digital Prosthetic Design</strong> – CAD/CAM solutions for crowns, bridges, and implant-supported 
+      restorations with excellent fit and aesthetics.
+    </li>
+    <li>
+      <strong>Consultancy & Training</strong> – Guidance for clinics adopting digital workflows, 
+      including surgical guide usage and advanced implantology.
+    </li>
+    <li>
+      <strong>Patient-Centered Solutions</strong> – Tools designed to reduce treatment time, improve comfort, 
+      and deliver long-lasting results.
+    </li>
+  </ul>
+</section>
+
+  <!-- Upload Section -->
+<section id="upload"></section>
+    <h2>Upload Files</h2>
+    <p>Upload your STL, DICOM, or 3D scan files securely. We’ll process them and send back the design.</p>
+    <form action="/upload" method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 10px; max-width: 400px;">
+        <input type="text" name="doctor" placeholder="Dentist Name" required>
+        <input type="email" name="email" placeholder="Dentist Email" required>
+        <input type="file" name="file" accept=".stl,.dicom,.zip" required>
+        <input type="file" name="file" accept=".stl,.dicom,.zip" required>
+        <input type="file" name="file" accept=".stl,.dicom,.zip" required>
+        <button type="submit" class="btn">Upload</button>
+    </form>
+</section>
+
+<!-- Contact Section -->
+<form action="/submit_form" method="post">
+  <label for="patientName">Patient Name:</label><br>
+  <input type="text" id="patientName" name="patientName" required><br><br>
+
+  <label for="patientID">Patient ID:</label><br>
+  <input type="text" id="patientID" name="patientID" required><br><br>
+
+  <label for="implantType">Implant Type:</label><br>
+  <input type="text" id="implantType" name="implantType" placeholder="Enter implant type" required><br><br>
+
+  <label for="surgeryDay">Surgery Day:</label><br>
+  <input type="date" id="surgeryDay" name="surgeryDay" required><br><br>
+
+  <label for="notes">Additional Notes:</label><br>
+  <textarea id="notes" name="notes" placeholder="Any special instructions"></textarea><br><br>
+
+  <input type="submit" value="Submit">
+</form>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 DentNord. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>
+<img src="surgery.jpg.jpg" alt="Dentist performing implant surgery in a modern, well-lit clinic, surrounded by advanced dental equipment. The atmosphere is professional and focused. No visible text in the image." style="position:fixed; top:0; left:0; width:100vw; height:100vh; object-fit:cover; z-index:-1; pointer-events:none; opacity: 0.75;" aria-hidden="true">
+<img src="implant1.jpg.png" alt="Surgery" width="200" style="opacity: 0.5;">
+<!-- Logo at the top left of the header -->
+<div style="position: absolute; top: 20px; left: 30px;">
+    <img src="logo.png.jpg" alt="DentNord logo, a stylized tooth with digital elements, conveying innovation and professionalism in a clean, modern design" width="120">
+</div>
+<!-- Example: Displaying an image -->
+<img src="images/implant1.jpg" alt="Implant Example" width="600">
