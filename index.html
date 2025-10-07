@@ -651,11 +651,10 @@
         <p>Securely submit your dental scans and receive professional designs</p>
       </div>
       <div class="upload-container">
-        <form class="upload-form" action="https://formspree.io/f/xvgwqbkd" method="POST" enctype="multipart/form-data">
+                <form class="upload-form" id="uploadForm" enctype="multipart/form-data">
           <div class="form-group">
             <label for="doctor">Your Name</label>
             <input type="text" id="doctor" name="name" placeholder="Dr. John Smith" required>
-          </div>
           <div class="form-group">
             <label for="email">Email Address</label>
             <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
@@ -741,7 +740,7 @@
           </div>
         </div>
         <div class="contact-form">
-          <form action="/contact" method="POST">
+          <form action="https://formspree.io/f/xvgwqbkd" method="POST">
             <div class="form-group">
               <label for="contact-name">Your Name</label>
               <input type="text" id="contact-name" name="name" required>
@@ -816,6 +815,40 @@
   </footer>
 
   <script>
+    // Google Apps Script Web App URL
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzl_vbvBF8b0MTmDGngluPROu2pKIC_8_nx6vITBIR7vDAcfIYKKryaFOQm_MJ0CJBtVw/exec';
+
+    // Form submission handler
+    document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const submitButton = this.querySelector('button[type="submit"]');
+      
+      try {
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
+        
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (response.ok) {
+          alert('Form submitted successfully!');
+          this.reset();
+        } else {
+          throw new Error('Form submission failed');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Files';
+      }
+    });
+
     // Simple file upload interaction
     document.querySelector('.file-upload').addEventListener('click', function() {
       document.getElementById('file').click();
