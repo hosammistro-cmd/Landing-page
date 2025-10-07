@@ -535,11 +535,11 @@
           
           <!-- Placeholder for dental image -->
             <div class="about-image-slider" style="position: relative; width: 100%; height: 400px; border-radius: 10px; overflow: hidden;">
-            <img src="surgery.jpg.jpg" alt="Dental Technology 1" class="slider-img" style="width:100%; height:400px; object-fit:cover; border-radius:10px; position:absolute; top:0; left:0; opacity:1; transition:opacity 1s;">
-            <img src="implant1.jpg.png" alt="Dental Technology 2" class="slider-img" style="width:100%; height:400px; object-fit:cover; border-radius:10px; position:absolute; top:0; left:0; opacity:0; transition:opacity 1s;">
-            <img src="implant2.jpg.png" alt="Dental Technology 3" class="slider-img" style="width:100%; height:400px; object-fit:cover; border-radius:10px; position:absolute; top:0; left:0; opacity:0; transition:opacity 1s;">
-            <img src="SingleUnit_DTP.png" alt="Dental Technology 4" class="slider-img" style="width:100%; height:400px; object-fit:cover; border-radius:10px; position:absolute; top:0; left:0; opacity:0; transition:opacity 1s;">
-            <img src="surgery.jpg.jpg" alt="Dental Technology 5" class="slider-img" style="width:100%; height:400px; object-fit:cover; border-radius:10px; position:absolute; top:0; left:0; opacity:0; transition:opacity 1s;">
+            <img src="images/surgery.jpg.jpg" alt="Dental Technology 1" class="slider-img" style="width:100%; height:400px; object-fit:cover; border-radius:10px; position:absolute; top:0; left:0; opacity:1; transition:opacity 1s;">
+            <img src="images/implant1.jpg.png" alt="Dental Technology 2" class="slider-img" style="width:100%; height:400px; object-fit:cover; border-radius:10px; position:absolute; top:0; left:0; opacity:0; transition:opacity 1s;">
+            <img src="images/implant2.jpg.png" alt="Dental Technology 3" class="slider-img" style="width:100%; height:400px; object-fit:cover; border-radius:10px; position:absolute; top:0; left:0; opacity:0; transition:opacity 1s;">
+            <img src="images/SingleUnit_DTP.png" alt="Dental Technology 4" class="slider-img" style="width:100%; height:400px; object-fit:cover; border-radius:10px; position:absolute; top:0; left:0; opacity:0; transition:opacity 1s;">
+            <img src="images/surgery.jpg.jpg" alt="Dental Technology 5" class="slider-img" style="width:100%; height:400px; object-fit:cover; border-radius:10px; position:absolute; top:0; left:0; opacity:0; transition:opacity 1s;">
             </div>
           </div>
           <script>
@@ -651,13 +651,15 @@
         <p>Securely submit your dental scans and receive professional designs</p>
       </div>
       <div class="upload-container">
-                <form class="upload-form" id="uploadForm" enctype="multipart/form-data">
+                <form class="upload-form" id="uploadForm" method="POST" enctype="multipart/form-data">
           <div class="form-group">
             <label for="doctor">Your Name</label>
             <input type="text" id="doctor" name="name" placeholder="Dr. John Smith" required>
+          </div>
           <div class="form-group">
             <label for="email">Email Address</label>
             <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+          </div>
           <div class="form-group">
             <label for="clinic">Clinic Name</label>
             <input type="text" id="clinic" name="clinic" placeholder="Your Dental Clinic" required>
@@ -683,10 +685,11 @@
               <i class="fas fa-cloud-upload-alt"></i>
               <p>Click to upload or drag and drop</p>
               <p>STL, DICOM, or 3D scan files </p>
-              <input type="file" id="file" name="attachment" style="display: none;" multiple>
+              <input type="file" id="file" name="attachment" style="display: none;" multiple accept=".stl,.dcm,.obj,.ply">
             </div>
           </div>
           <input type="hidden" name="_subject" value="New File Upload from DentNord">
+          <input type="hidden" name="_captcha" value="false">
           <button type="submit" class="submit-btn">Submit Files</button>
         </form>
       </div>
@@ -815,23 +818,23 @@
   </footer>
 
   <script>
-    // Google Apps Script Web App URL
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzl_vbvBF8b0MTmDGngluPROu2pKIC_8_nx6vITBIR7vDAcfIYKKryaFOQm_MJ0CJBtVw/exec';
-
     // Form submission handler
     document.getElementById('uploadForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       
-      const formData = new FormData(this);
       const submitButton = this.querySelector('button[type="submit"]');
+      const formData = new FormData(this);
       
       try {
         submitButton.disabled = true;
         submitButton.textContent = 'Sending...';
         
-        const response = await fetch(SCRIPT_URL, {
+        const response = await fetch(this.action, {
           method: 'POST',
-          body: formData
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
         });
         
         if (response.ok) {
