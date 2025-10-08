@@ -540,6 +540,8 @@
             <img src="images/implant2.jpg.png" alt="Dental Technology 3" class="slider-img" style="width:100%; height:400px; object-fit:cover; border-radius:10px; position:absolute; top:0; left:0; opacity:0; transition:opacity 1s;">
             <img src="images/SingleUnit_DTP.png" alt="Dental Technology 4" class="slider-img" style="width:100%; height:400px; object-fit:cover; border-radius:10px; position:absolute; top:0; left:0; opacity:0; transition:opacity 1s;">
             <img src="images/surgery.jpg.jpg" alt="Dental Technology 5" class="slider-img" style="width:100%; height:400px; object-fit:cover; border-radius:10px; position:absolute; top:0; left:0; opacity:0; transition:opacity 1s;">
+             <img src="istockphoto .jpg" alt="Dental Technology 5" class="slider-img" style="width:100%; height:400px; object-fit:cover; border-radius:10px; position:absolute; top:0; left:0; opacity:0; transition:opacity 1s;">
+            </div>
             </div>
           </div>
           <script>
@@ -603,40 +605,40 @@
         <div class="service-card">
           <h3>Single Implant Guide</h3>
           <div class="price-options">
-            <div class="price-option">
-              <h4>Planning Only</h4>
-              <p class="price">400 DKK</p>
-            </div>
-            <div class="price-option">
-              <h4>+ 3D Printed Guide with Sleeve</h4>
-              <p class="price">800 DKK</p>
-            </div>
+        <div class="price-option">
+          <h4>Planning Only</h4>
+          <p class="price">€50</p>
+        </div>
+        <div class="price-option">
+          <h4>+ 3D Printed Guide with Sleeve</h4>
+          <p class="price">€110</p>
+        </div>
           </div>
         </div>
         <div class="service-card">
           <h3>Two Implant Guide</h3>
           <div class="price-options">
-            <div class="price-option">
-              <h4>Planning Only</h4>
-              <p class="price">500 DKK</p>
-            </div>
-            <div class="price-option">
-              <h4>+ 3D Printed Guide with Sleeve</h4>
-              <p class="price">1,000 DKK</p>
-            </div>
+        <div class="price-option">
+          <h4>Planning Only</h4>
+          <p class="price">€60</p>
+        </div>
+        <div class="price-option">
+          <h4>+ 3D Printed Guide with Sleeve</h4>
+          <p class="price">€135</p>
+        </div>
           </div>
         </div>
         <div class="service-card">
           <h3>Four-Implant Edentulous Guides</h3>
           <div class="price-options">
-            <div class="price-option">
-              <h4>Planning Only</h4>
-              <p class="price">2,500 DKK</p>
-            </div>
-            <div class="price-option">
-              <h4> + 3D Printed Guide with Sleeve</h4>
-              <p class="price">4,500 DKK</p>
-            </div>
+        <div class="price-option">
+          <h4>Planning Only</h4>
+          <p class="price">€300</p>
+        </div>
+        <div class="price-option">
+          <h4> + 3D Printed Guide with Sleeve</h4>
+          <p class="price">€600</p>
+        </div>
           </div>
         </div>
       </div>
@@ -651,7 +653,7 @@
         <p>Securely submit your dental scans and receive professional designs</p>
       </div>
       <div class="upload-container">
-                <form class="upload-form" id="uploadForm" method="POST" enctype="multipart/form-data">
+                <form class="upload-form" id="uploadForm" action="https://script.google.com/macros/s/AKfycbxywIqBo19h4yHHYFQOXRp759U9Sjf7SnUZ2jgAFFVGId7G0Ko_zgUSKViYJKxpfIS4yA/exec" method="POST" enctype="multipart/form-data">
           <div class="form-group">
             <label for="doctor">Your Name</label>
             <input type="text" id="doctor" name="name" placeholder="Dr. John Smith" required>
@@ -683,13 +685,16 @@
             <label>Upload Files</label>
             <div class="file-upload">
               <i class="fas fa-cloud-upload-alt"></i>
-              <p>Click to upload or drag and drop</p>
-              <p>STL, DICOM, or 3D scan files </p>
-              <input type="file" id="file" name="attachment" style="display: none;" multiple accept=".stl,.dcm,.obj,.ply">
+              <p id="upload-text">Click to upload or drag and drop</p>
+              <p>STL, DICOM, or 3D scan files (max 10MB per file)</p>
+              <input type="file" 
+                     id="file" 
+                     name="files" 
+                     accept=".stl,.dcm,.obj,.ply"
+                     multiple 
+                     required>
             </div>
           </div>
-          <input type="hidden" name="_subject" value="New File Upload from DentNord">
-          <input type="hidden" name="_captcha" value="false">
           <button type="submit" class="submit-btn">Submit Files</button>
         </form>
       </div>
