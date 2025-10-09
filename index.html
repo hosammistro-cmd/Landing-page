@@ -653,7 +653,7 @@
         <p>Securely submit your dental scans and receive professional designs</p>
       </div>
       <div class="upload-container">
-        <form class="upload-form" id="uploadForm" action="https://script.google.com/macros/s/AKfycby4NUxT5b2sQgd55OJEAzJ4OylBpjJmeVvHjcSKu1bq8AkhdWc5qTjN3qZclxwOOaNuZA/exec" method="POST" enctype="multipart/form-data">
+        <form class="upload-form" id="uploadForm" action="https://script.google.com/macros/s/AKfycbzXrHtE3fz0wZ4NXj3vvvxPN5CjPXCQPU2YnUSzJIP4RISFAzwqXjsWfTvBAO-X1QLulw/exec" method="POST" enctype="multipart/form-data">
           <div class="form-group">
             <label for="doctor">Your Name</label>
             <input type="text" id="doctor" name="name" placeholder="Dr. John Smith" required>
@@ -801,8 +801,7 @@
       e.preventDefault();
       const form = this;
       const submitButton = form.querySelector('button[type="submit"]');
-      const formData = new FormData(form);
-
+      
       try {
         // Disable submit button
         submitButton.disabled = true;
@@ -814,10 +813,19 @@
           throw new Error('Please select at least one file');
         }
 
+        // Create form data with text fields
+        const formData = new FormData();
+        formData.append('name', document.getElementById('doctor').value);
+        formData.append('email', document.getElementById('email').value);
+        formData.append('clinic', document.getElementById('clinic').value);
+        formData.append('service', document.getElementById('service').value);
+        formData.append('message', document.getElementById('notes').value);
+
         // Add files to form data
-        Array.from(files).forEach((file, index) => {
-          formData.append(`files`, file);
-        });
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          formData.append(`files${i}`, file);
+        }
 
         // Check if form action URL is set
         if (!form.action) {
@@ -850,12 +858,16 @@
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeoutDuration);
 
-        const response = await fetch(form.action, {
+        // Create a URL-encoded string of the form data
+        const formDataString = new URLSearchParams(formData).toString();
+        
+        // Make the request
+        const response = await fetch(`${form.action}?${formDataString}`, {
           method: 'POST',
           mode: 'cors',
-          body: formData,
           redirect: 'follow',
           headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
             'Accept': '*/*'
           },
           signal: controller.signal
