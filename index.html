@@ -653,7 +653,7 @@
         <p>Securely submit your dental scans and receive professional designs</p>
       </div>
       <div class="upload-container">
-        <form class="upload-form" id="uploadForm" action="https://script.google.com/macros/s/AKfycbwN8Uwn5IM1VLkWOM_jnESZj6soxHNrCPfC7wqen-zx4L1USnX781Rgif9wyo9dWTq2/exec" method="POST" enctype="multipart/form-data">
+        <form class="upload-form" id="uploadForm" action="https://script.google.com/macros/s/AKfycbxnWXgEK9PkMjSFz23iwms0iHQu5STapw54ya5XWJS1xIzZbxPitLUjZTBea9UdjaD4/exec" method="POST" enctype="multipart/form-data">
           <div class="form-group">
             <label for="doctor">Your Name</label>
             <input type="text" id="doctor" name="name" placeholder="Dr. John Smith" required>
@@ -804,9 +804,20 @@
       let loadingDiv = null;
       
       try {
-        // Disable submit button
-        submitButton.disabled = true;
-        submitButton.textContent = 'Sending...';
+        // Validate form fields
+        const requiredFields = ['doctor', 'email', 'clinic', 'service'];
+        for (const fieldId of requiredFields) {
+          const field = document.getElementById(fieldId);
+          if (!field.value.trim()) {
+            throw new Error(`Please fill in the ${fieldId.replace('_', ' ')} field`);
+          }
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(document.getElementById('email').value)) {
+          throw new Error('Please enter a valid email address');
+        }
 
         // Get files
         const files = document.getElementById('attach').files;
@@ -815,34 +826,38 @@
         }
 
         // Check total file size
-        const totalSize = Array.from(files).reduce((acc, file) => acc + file.size, 0);
-        const maxSize = 50 * 1024 * 1024; // 50MB limit
-        if (totalSize > maxSize) {
+        const totalBytes = Array.from(files).reduce((acc, file) => acc + file.size, 0);
+        const maxBytes = 50 * 1024 * 1024; // 50MB limit
+        if (totalBytes > maxBytes) {
           throw new Error('Total file size exceeds 50MB limit. Please reduce file sizes.');
         }
 
-        // Show loading indicator with progress
+        // Disable submit button and show initial status
+        submitButton.disabled = true;
+        submitButton.textContent = 'Processing...';
+
+        // Show loading indicator
         loadingDiv = document.createElement('div');
         loadingDiv.style.position = 'fixed';
         loadingDiv.style.top = '50%';
         loadingDiv.style.left = '50%';
         loadingDiv.style.transform = 'translate(-50%, -50%)';
         loadingDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
-        loadingDiv.style.padding = '20px';
+        loadingDiv.style.padding = '30px';
         loadingDiv.style.borderRadius = '10px';
-        loadingDiv.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+        loadingDiv.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
         loadingDiv.style.zIndex = '1000';
         loadingDiv.style.minWidth = '300px';
         loadingDiv.innerHTML = `
           <div style="text-align: center;">
-            <div class="fas fa-spinner fa-spin" style="font-size: 2em; color: #0056b3; margin-bottom: 10px;"></div>
-            <p id="upload-status">Preparing to upload files...</p>
+            <div class="fas fa-spinner fa-spin" style="font-size: 2.5em; color: #0056b3; margin-bottom: 15px;"></div>
+            <p id="upload-status">Preparing files...</p>
             <p style="font-size: 0.9em; color: #666;">This may take a few minutes</p>
           </div>
         `;
         document.body.appendChild(loadingDiv);
 
-        // Create form data with text fields
+        // Create form data
         const formData = new FormData();
         formData.append('name', document.getElementById('doctor').value);
         formData.append('email', document.getElementById('email').value);
@@ -850,16 +865,13 @@
         formData.append('service', document.getElementById('service').value);
         formData.append('message', document.getElementById('notes').value);
 
-        // Add files to form data with size info
-        let totalBytes = 0;
+        // Add files to form data
         for (let i = 0; i < files.length; i++) {
           const file = files[i];
-          formData.append(`files${i}`, file);
-          formData.append(`fileNames${i}`, file.name);
-          totalBytes += file.size;
+          formData.append(`file${i}`, file);
+          formData.append(`fileName${i}`, file.name);
         }
         formData.append('fileCount', files.length.toString());
-        formData.append('totalSize', totalBytes.toString());
 
         // Check if form action URL is set
         if (!form.action) {
@@ -869,51 +881,8 @@
         // Update loading status
         const statusEl = loadingDiv.querySelector('#upload-status');
         statusEl.textContent = 'Uploading files...';
-        loadingDiv.style.position = 'fixed';
-        loadingDiv.style.top = '50%';
-        loadingDiv.style.left = '50%';
-        loadingDiv.style.transform = 'translate(-50%, -50%)';
-        loadingDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-        loadingDiv.style.padding = '20px';
-        loadingDiv.style.borderRadius = '10px';
-        loadingDiv.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
-        loadingDiv.style.zIndex = '1000';
-        loadingDiv.innerHTML = `
-          <div style="text-align: center;">
-            <div class="fas fa-spinner fa-spin" style="font-size: 2em; color: #0056b3; margin-bottom: 10px;"></div>
-            <p>Uploading files...</p>
-          </div>
-        `;
-        document.body.appendChild(loadingDiv);
 
-        // Update loading message with progress
-        const loadingDiv = document.createElement('div');
-        loadingDiv.style.position = 'fixed';
-        loadingDiv.style.top = '50%';
-        loadingDiv.style.left = '50%';
-        loadingDiv.style.transform = 'translate(-50%, -50%)';
-        loadingDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
-        loadingDiv.style.padding = '20px';
-        loadingDiv.style.borderRadius = '10px';
-        loadingDiv.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
-        loadingDiv.style.zIndex = '1000';
-        loadingDiv.innerHTML = `
-          <div style="text-align: center;">
-            <div class="fas fa-spinner fa-spin" style="font-size: 2em; color: #0056b3; margin-bottom: 10px;"></div>
-            <p id="upload-status">Preparing files...</p>
-            <div style="width: 200px; height: 4px; background: #eee; margin: 10px auto;">
-              <div id="upload-progress" style="width: 0%; height: 100%; background: #0056b3; transition: width 0.3s;"></div>
-            </div>
-          </div>
-        `;
-        document.body.appendChild(loadingDiv);
-
-        // Submit form with longer timeout
-        const timeoutDuration = 300000; // 5 minutes
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), timeoutDuration);
-
-        // Submit with a longer timeout
+        // Set up request with timeout
         const timeoutDuration = 300000; // 5 minutes
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeoutDuration);
@@ -924,21 +893,7 @@
           mode: 'cors',
           redirect: 'follow',
           body: formData,
-          headers: {
-            'Accept': '*/*'
-          },
           signal: controller.signal
-        }).catch(error => {
-          // Remove loading indicator
-          document.body.removeChild(loadingDiv);
-          console.error('Fetch error:', error);
-          if (error.name === 'AbortError') {
-            throw new Error('Request timed out. Please try again.');
-          }
-          if (error.message.includes('CORS')) {
-            throw new Error('CORS error: The server does not allow file uploads from this website. Please contact support.');
-          }
-          throw new Error('Network error: Failed to connect to the server. Please check your internet connection and try again.');
         });
 
         clearTimeout(timeoutId);
@@ -949,10 +904,25 @@
 
         const responseText = await response.text();
         console.log('Server response:', responseText);
-        
+
+        // Try to parse the response as JSON
+        let result;
         try {
-          // Remove loading indicator
+          result = JSON.parse(responseText);
+        } catch (e) {
+          console.error('Failed to parse response:', e);
+          throw new Error('Server response was not in the expected format');
+        }
+
+        // Check if the upload was successful
+        if (!result.success) {
+          throw new Error(result.error || 'Upload failed');
+        }
+
+        // Remove loading indicator
+        if (loadingDiv && loadingDiv.parentNode) {
           document.body.removeChild(loadingDiv);
+        }
 
           const result = JSON.parse(responseText);
           if (response.ok && result.success) {
