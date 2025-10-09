@@ -653,7 +653,7 @@
         <p>Securely submit your dental scans and receive professional designs</p>
       </div>
       <div class="upload-container">
-        <form class="upload-form" id="uploadForm" action="https://script.google.com/macros/s/AKfycbzXrHtE3fz0wZ4NXj3vvvxPN5CjPXCQPU2YnUSzJIP4RISFAzwqXjsWfTvBAO-X1QLulw/exec" method="POST" enctype="multipart/form-data">
+        <form class="upload-form" id="uploadForm" action="https://script.google.com/macros/s/AKfycbwN8Uwn5IM1VLkWOM_jnESZj6soxHNrCPfC7wqen-zx4L1USnX781Rgif9wyo9dWTq2/exec" method="POST" enctype="multipart/form-data">
           <div class="form-group">
             <label for="doctor">Your Name</label>
             <input type="text" id="doctor" name="name" placeholder="Dr. John Smith" required>
@@ -858,16 +858,13 @@
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeoutDuration);
 
-        // Create a URL-encoded string of the form data
-        const formDataString = new URLSearchParams(formData).toString();
-        
         // Make the request
-        const response = await fetch(`${form.action}?${formDataString}`, {
+        const response = await fetch(form.action, {
           method: 'POST',
           mode: 'cors',
           redirect: 'follow',
+          body: formData,
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
             'Accept': '*/*'
           },
           signal: controller.signal
