@@ -653,7 +653,7 @@
         <p>Securely submit your dental scans and receive professional designs</p>
       </div>
       <div class="upload-container">
-                <form class="upload-form" id="uploadForm" action="https://script.google.com/macros/s/AKfycbx8Dl2f8eGrIrb8xCS8x5fbC8BB4bOkrAGVM5p4LnMTF0GNFLeFbM4ubW14zxzAyf83DQ/exec" method="POST" enctype="multipart/form-data">
+        <form class="upload-form" id="uploadForm" action="https://script.google.com/macros/s/AKfycbx8Dl2f8eGrIrb8xCS8x5fbC8BB4bOkrAGVM5p4LnMTF0GNFLeFbM4ubW14zxzAyf83DQ/exec" method="POST" enctype="multipart/form-data">
           <div class="form-group">
             <label for="doctor">Your Name</label>
             <input type="text" id="doctor" name="name" placeholder="Dr. John Smith" required>
@@ -687,12 +687,7 @@
               <i class="fas fa-cloud-upload-alt"></i>
               <p id="upload-text">Click to upload or drag and drop</p>
               <p>STL, DICOM, or 3D scan files (max 10MB per file)</p>
-              <input type="file" 
-                     id="file" 
-                     name="files" 
-                     accept=".stl,.dcm,.obj,.ply"
-                     multiple 
-                     required>
+              <input type="file" id="attach" name="attach" accept=".stl,.dcm,.obj,.ply" multiple required>
             </div>
           </div>
           <button type="submit" class="submit-btn">Submit Files</button>
@@ -807,25 +802,59 @@
       
       const submitButton = this.querySelector('button[type="submit"]');
       const formData = new FormData(this);
-      
+
       try {
         submitButton.disabled = true;
         submitButton.textContent = 'Sending...';
-        
-        const response = await fetch(this.action, {
-          method: 'POST',
-          body: formData,
-          headers: {
+
+        var file = document.getElementById('attach').files[0];
+        var fName = file.name;
+        var fSize = file.size;
+        var fType = file.type;
+        console.log("fName = " + fName);
+        console.log("fSize = " + fSize);
+        console.log("fType = " + fType);
+
+        if (fSize > 10 * 1024 * 1024) { // 10MB limit
+          alert('File size exceeds 10MB limit.');
+          return;
+        }
+
+        var formUploader = this;
+
+        var reader = new FileReader();
+        reader.onload = async function(e) {
+          var dataURL = e.target.result;
+          console.log("dataURL = " + dataURL);
+
+          console.log({
+            fileName: fName,
+            fileSize: fSize,
+            fileType: fType,
+            fileData: dataURL,
+            action: formUploader.action,
+            formData: formData
+          });
+
+          formData.append('fileData', dataURL);
+
+          const response = await fetch(formUploader.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
             'Accept': 'application/json'
           }
         });
         
         if (response.ok) {
           alert('Form submitted successfully!');
-          this.reset();
+          formUploader.reset();
         } else {
+          console.error('Form submission error:', response.statusText);
           throw new Error('Form submission failed');
         }
+        };
+        reader.readAsDataURL(file);
       } catch (error) {
         console.error('Error:', error);
         alert('An error occurred. Please try again.');
@@ -841,18 +870,18 @@
     // });
 
     // Update file upload text when files are selected
-    document.getElementById('file').addEventListener('change', function() {
-      const files = this.files;
-      const fileUpload = document.querySelector('.file-upload');
+    // document.getElementById('file').addEventListener('change', function() {
+    //   const files = this.files;
+    //   const fileUpload = document.querySelector('.file-upload');
       
-      if (files.length > 0) {
-        fileUpload.innerHTML = `<i class="fas fa-check-circle"></i>
-                                <p>${files.length} file(s) selected</p>
-                                <p>Click to change files</p>`;
-        fileUpload.style.borderColor = '#0056b3';
-        fileUpload.style.backgroundColor = '#f0f8ff';
-      }
-    });
+    //   if (files.length > 0) {
+    //     fileUpload.innerHTML = `<i class="fas fa-check-circle"></i>
+    //                             <p>${files.length} file(s) selected</p>
+    //                             <p>Click to change files</p>`;
+    //     fileUpload.style.borderColor = '#0056b3';
+    //     fileUpload.style.backgroundColor = '#f0f8ff';
+    //   }
+    // });
 
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
