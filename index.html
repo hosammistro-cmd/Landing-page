@@ -653,7 +653,7 @@
         <p>Securely submit your dental scans and receive professional designs</p>
       </div>
       <div class="upload-container">
-        <form class="upload-form" id="uploadForm" action="https://script.google.com/macros/s/AKfycbxLWTFtnlRiK_eKQe8MZAZicMVKTQhplRr44_CQ2rARXBC6S_EoKxQ-fir9ctx2HrMe/exec" method="POST" enctype="multipart/form-data">
+        <form class="upload-form" id="uploadForm" action="https://script.google.com/macros/s/AKfycbz3RGdCE9cfSmBVU5cX7kCIoV7vOHgY0VdPo9EKNsH7KkiFB8-C999BZ71DIntFwnGn/exec" method="POST" enctype="multipart/form-data">
           <div class="form-group">
             <label for="doctor">Your Name</label>
             <input type="text" id="doctor" name="name" placeholder="Dr. John Smith" required>
@@ -902,6 +902,10 @@
           throw new Error('No response received from server');
         }
 
+        if (!response.ok) {
+          throw new Error(`Server responded with status: ${response.status}`);
+        }
+
         const responseText = await response.text();
         console.log('Server response:', responseText);
 
@@ -911,12 +915,15 @@
           result = JSON.parse(responseText);
         } catch (e) {
           console.error('Failed to parse response:', e);
+          console.error('Raw response:', responseText);
           throw new Error('Server response was not in the expected format');
         }
 
         // Check if the upload was successful
-        if (!result.success) {
-          throw new Error(result.error || 'Upload failed');
+        if (!result || !result.success) {
+          const errorMessage = result?.error || 'Upload failed - server did not indicate success';
+          console.error('Upload error:', errorMessage);
+          throw new Error(errorMessage);
         }
 
         // Remove loading indicator
