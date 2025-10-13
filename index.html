@@ -1024,15 +1024,23 @@
           </div>
         `;
 
-        // Auto-remove success message
+        document.body.appendChild(successDiv);
+
+        // Auto-remove success message after 8 seconds
         setTimeout(() => {
           if (successDiv.parentNode) {
             successDiv.style.opacity = '0';
             successDiv.style.transform = 'translate(-50%, -50%) scale(0.9)';
+            successDiv.style.transition = 'all 0.3s ease';
             setTimeout(() => successDiv.parentNode?.removeChild(successDiv), 300);
           }
         }, 8000);
 
+        // Reset the form
+        form.reset();
+} else {
+  throw new Error(result.message || 'Upload failed');
+}
       } catch (error) {
         console.error('Error:', error);
         
