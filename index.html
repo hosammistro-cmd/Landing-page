@@ -902,6 +902,9 @@
 
         submitButton.disabled = true;
 
+        // Process multiple files with FileReader
+        const files = Array.from(fileInput.files);
+
         // Show enhanced loading indicator
         loadingDiv = document.createElement('div');
         loadingDiv.className = 'status-popup';
@@ -912,9 +915,6 @@
             <p>Please wait while we securely upload your ${files.length} file(s). This may take a moment for larger files.</p>
           </div>`;
         document.body.appendChild(loadingDiv);
-
-        // Process multiple files with FileReader
-        const files = Array.from(fileInput.files);
         const formData = new FormData(form);
         
         // Prepare files data array
