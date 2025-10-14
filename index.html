@@ -772,8 +772,8 @@
             <div class="file-upload">
               <i class="fas fa-cloud-upload-alt"></i>
               <p id="upload-text">Click to upload or drag and drop</p>
-              <p>STL, DICOM, or 3D scan files</p>
-              <input type="file" id="attach" name="attach" accept=".stl,.dcm,.obj,.ply" multiple required>
+              <p>STL, DICOM, 3D scan files, and compressed archives (ZIP, RAR, 7Z)</p>
+              <input type="file" id="attach" name="attach" accept=".stl,.dcm,.obj,.ply,.zip,.rar,.7z,.tar,.gz,.tar.gz" multiple required>
             </div>
           </div>
           <button type="submit" class="submit-btn">Submit Files</button>
@@ -908,45 +908,71 @@
         loadingDiv.innerHTML = `
           <div class="status-popup-content">
             <div class="loading-spinner"></div>
-            <h3 class="status-title">Uploading Files...</h3>
-            <p>Please wait while we securely upload your files.</p>
+            <h3 class="status-title">Uploading ${files.length} File(s)...</h3>
+            <p>Please wait while we securely upload your ${files.length} file(s). This may take a moment for larger files.</p>
           </div>`;
         document.body.appendChild(loadingDiv);
 
-        // Process first file with FileReader (like test-upload version)
-        const file = fileInput.files[0];
-        const reader = new FileReader();
+        // Process multiple files with FileReader
+        const files = Array.from(fileInput.files);
+        const formData = new FormData(form);
+        
+        // Prepare files data array
+        let processedFiles = 0;
+        const filesData = [];
+        
+        // Function to process each file
+        const processFile = (file, index) => {
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            
+            reader.onload = (event) => {
+              const fileData = {
+                fileName: file.name,
+                mimeType: file.type,
+                data: event.target.result.split(',')[1], // Get base64 part
+                fileIndex: index
+              };
+              resolve(fileData);
+            };
+            
+            reader.onerror = () => {
+              reject(new Error(`Failed to read file: ${file.name}`));
+            };
+            
+            reader.readAsDataURL(file);
+          });
+        };
 
-        reader.onload = (event) => {
-          // Get form data
-          const formData = new FormData(form);
-          
-          // Create file data object like in test-upload
-          const fileData = {
-            fileName: file.name,
-            mimeType: file.type,
-            data: event.target.result.split(',')[1], // Get base64 part
-            // Add form fields
-            name: formData.get('name'),
-            email: formData.get('email'),
-            clinic: formData.get('clinic'),
-            service: formData.get('service'),
-            message: formData.get('message')
-          };
+        // Process all files
+        Promise.all(files.map((file, index) => processFile(file, index)))
+          .then(fileDataArray => {
+            // Create submission data with all files
+            const submissionData = {
+              files: fileDataArray,
+              formData: {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                clinic: formData.get('clinic'),
+                service: formData.get('service'),
+                message: formData.get('message')
+              }
+            };
 
-          fetch(form.action, {
-            method: 'POST',
-            body: JSON.stringify(fileData),
-            headers: {
-              'Content-Type': 'text/plain;charset=utf-8', // Required for Apps Script web apps
-            },
+            return fetch(form.action, {
+              method: 'POST',
+              body: JSON.stringify(submissionData),
+              headers: {
+                'Content-Type': 'text/plain;charset=utf-8', // Required for Apps Script web apps
+              },
+            });
           })
           .then(response => response.json())
           .then(result => {
             // Remove loading indicator
             if (loadingDiv) loadingDiv.remove();
 
-            if (result.status === 'success') {
+            if (result.success) {
               // Show enhanced success message
               const successDiv = document.createElement('div');
               successDiv.className = 'status-popup';
@@ -956,8 +982,11 @@
                     <i class="fas fa-check-circle"></i>
                   </div>
                   <h3 class="status-title">Upload Successful!</h3>
-                  <p style="margin-bottom: 15px;">Your files have been received. We will begin processing them shortly.</p>
-                  ${result.fileUrl ? `<p><a href="${result.fileUrl}" target="_blank">View uploaded file</a></p>` : ''}
+                  <p style="margin-bottom: 15px;">Your ${files.length} file(s) have been received. We will begin processing them shortly.</p>
+                  ${result.files && result.files.length > 0 ? 
+                    `<div style="max-height: 100px; overflow-y: auto;">
+                      ${result.files.map(file => `<p><a href="${file.url}" target="_blank">${file.name}</a></p>`).join('')}
+                    </div>` : ''}
                   <button class="status-close-btn">Close</button>
                 </div>`;
               document.body.appendChild(successDiv);
@@ -975,7 +1004,7 @@
               }
 
             } else {
-              throw new Error(result.message || 'Upload failed: Unknown error');
+              throw new Error(result.error || 'Upload failed: Unknown error');
             }
           })
           .catch(error => {
@@ -1002,31 +1031,6 @@
           .finally(() => {
             submitButton.disabled = false;
           });
-        };
-
-        reader.onerror = () => {
-          if (loadingDiv) loadingDiv.remove();
-          
-          const errorDiv = document.createElement('div');
-          errorDiv.className = 'status-popup';
-          errorDiv.innerHTML = `
-            <div class="status-popup-content">
-                <div class="error-icon">
-                  <i class="fas fa-times-circle"></i>
-                </div>
-                <h3 class="status-title">File Read Error</h3>
-                <p>Error reading file. Please try again.</p>
-                <button class="status-close-btn">Close</button>
-            </div>`;
-          document.body.appendChild(errorDiv);
-          errorDiv.querySelector('.status-close-btn').addEventListener('click', () => {
-            errorDiv.remove();
-          });
-          
-          submitButton.disabled = false;
-        };
-
-        reader.readAsDataURL(file);
       });
     }
   </script>
