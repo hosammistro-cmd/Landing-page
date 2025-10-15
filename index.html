@@ -837,202 +837,341 @@
   </footer>
 
   <script>
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-          behavior: 'smooth'
-        });
-      });
-    });
+// Chunked upload configuration
+const CHUNK_SIZE = 4 * 1024 * 1024; // 4MB chunks (well under 6MB GAS limit)
 
-    // File selection display handler
-    const fileInput = document.getElementById('attach');
-    if (fileInput) {
-      fileInput.addEventListener('change', function() {
-        const files = this.files;
-        const fileUpload = this.parentElement;
-        const fileInfo = fileUpload.querySelector('p');
+// Generate unique session ID for chunked uploads
+function generateSessionId() {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
 
-        if (files.length > 0) {
-          let fileNames = Array.from(files).map(f => f.name).join(', ');
-          if (fileNames.length > 50) {
-            fileNames = `${files.length} files selected`;
-          }
-          fileInfo.textContent = fileNames;
-          fileInfo.style.color = '#333';
-        } else {
-          fileInfo.innerHTML = 'Drag & drop files here or click to browse';
-          fileInfo.style.color = '#666';
-        }
-      });
-    }
+// Check if file should use chunked upload
+function shouldUseChunkedUpload(file) {
+  return file.size > CHUNK_SIZE;
+}
 
-    // Form submission handler
-    const uploadForm = document.getElementById('uploadForm');
-    if (uploadForm) {
-      uploadForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const form = this;
-        const fileInput = document.getElementById('attach');
-        const submitButton = form.querySelector('button[type="submit"]');
-        let loadingDiv = null;
-
-        // Check if files are selected
-        if (fileInput.files.length === 0) {
-          const errorDiv = document.createElement('div');
-          errorDiv.className = 'status-popup';
-          errorDiv.innerHTML = `
-            <div class="status-popup-content">
-                <div class="error-icon">
-                  <i class="fas fa-times-circle"></i>
-                </div>
-                <h3 class="status-title">No Files Selected</h3>
-                <p>Please select at least one file to upload.</p>
-                <button class="status-close-btn">Close</button>
-            </div>`;
-          document.body.appendChild(errorDiv);
-          errorDiv.querySelector('.status-close-btn').addEventListener('click', () => {
-            errorDiv.remove();
-          });
-          return;
-        }
-
-        submitButton.disabled = true;
-
-        // Process multiple files with FileReader
-        const files = Array.from(fileInput.files);
-
-        // Show enhanced loading indicator
-        loadingDiv = document.createElement('div');
-        loadingDiv.className = 'status-popup';
-        loadingDiv.innerHTML = `
-          <div class="status-popup-content">
-            <div class="loading-spinner"></div>
-            <h3 class="status-title">Uploading ${files.length} File(s)...</h3>
-            <p>Please wait while we securely upload your ${files.length} file(s). This may take a moment for larger files.</p>
-          </div>`;
-        document.body.appendChild(loadingDiv);
-        const formData = new FormData(form);
+// Upload file in chunks for large files
+function uploadFileInChunks(file, formData, sessionId) {
+  return new Promise((resolve, reject) => {
+    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+    let uploadedChunks = 0;
+    
+    function uploadChunk(chunkIndex) {
+      return new Promise((chunkResolve, chunkReject) => {
+        const start = chunkIndex * CHUNK_SIZE;
+        const end = Math.min(start + CHUNK_SIZE, file.size);
+        const chunk = file.slice(start, end);
         
-        // Prepare files data array
-        let processedFiles = 0;
-        const filesData = [];
-        
-        // Function to process each file
-        const processFile = (file, index) => {
-          return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            
-            reader.onload = (event) => {
-              const fileData = {
-                fileName: file.name,
-                mimeType: file.type,
-                data: event.target.result.split(',')[1], // Get base64 part
-                fileIndex: index
-              };
-              resolve(fileData);
-            };
-            
-            reader.onerror = () => {
-              reject(new Error(`Failed to read file: ${file.name}`));
-            };
-            
-            reader.readAsDataURL(file);
-          });
-        };
-
-        // Process all files
-        Promise.all(files.map((file, index) => processFile(file, index)))
-          .then(fileDataArray => {
-            // Create submission data with all files
-            const submissionData = {
-              files: fileDataArray,
-              formData: {
-                name: formData.get('name'),
-                email: formData.get('email'),
-                clinic: formData.get('clinic'),
-                service: formData.get('service'),
-                message: formData.get('message')
-              }
-            };
-
-            return fetch(form.action, {
-              method: 'POST',
-              body: JSON.stringify(submissionData),
-              headers: {
-                'Content-Type': 'text/plain;charset=utf-8', // Required for Apps Script web apps
-              },
-            });
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const chunkData = {
+            action: 'uploadChunk',
+            fileName: file.name,
+            chunkIndex: chunkIndex,
+            totalChunks: totalChunks,
+            chunkData: e.target.result.split(',')[1], // Base64 data
+            sessionId: sessionId,
+            formData: {
+              name: formData.get('name'),
+              email: formData.get('email'),
+              clinic: formData.get('clinic'),
+              service: formData.get('service'),
+              message: formData.get('message')
+            }
+          };
+          
+          fetch(document.getElementById('uploadForm').action, {
+            method: 'POST',
+            body: JSON.stringify(chunkData),
+            headers: {
+              'Content-Type': 'text/plain;charset=utf-8',
+            },
           })
           .then(response => response.json())
           .then(result => {
-            // Remove loading indicator
-            if (loadingDiv) loadingDiv.remove();
-
             if (result.success) {
-              // Show enhanced success message
-              const successDiv = document.createElement('div');
-              successDiv.className = 'status-popup';
-              successDiv.innerHTML = `
-                <div class="status-popup-content">
-                  <div class="success-checkmark">
-                    <i class="fas fa-check-circle"></i>
-                  </div>
-                  <h3 class="status-title">Upload Successful!</h3>
-                  <p style="margin-bottom: 15px;">Your ${files.length} file(s) have been received. We will begin processing them shortly.</p>
-                  ${result.files && result.files.length > 0 ? 
-                    `<div style="max-height: 100px; overflow-y: auto;">
-                      ${result.files.map(file => `<p><a href="${file.url}" target="_blank">${file.name}</a></p>`).join('')}
-                    </div>` : ''}
-                  <button class="status-close-btn">Close</button>
-                </div>`;
-              document.body.appendChild(successDiv);
-
-              successDiv.querySelector('.status-close-btn').addEventListener('click', () => {
-                successDiv.remove();
-              });
-
-              form.reset(); // Clear the form fields
-              // Reset file input text
-              const fileInfo = form.querySelector('.file-upload p');
-              if(fileInfo) {
-                  fileInfo.innerHTML = 'Click to upload or drag and drop';
-                  fileInfo.style.color = '#666';
+              uploadedChunks++;
+              
+              // Update progress
+              const progress = (uploadedChunks / totalChunks) * 100;
+              updateUploadProgress(file.name, progress, uploadedChunks, totalChunks);
+              
+              if (result.isComplete) {
+                chunkResolve(result);
+              } else {
+                chunkResolve({ success: true, progress: progress });
               }
-
             } else {
-              throw new Error(result.error || 'Upload failed: Unknown error');
+              chunkReject(new Error(result.error || 'Chunk upload failed'));
             }
           })
-          .catch(error => {
-            console.error('Error:', error);
-            if (loadingDiv) loadingDiv.remove();
-
-            // Show error message
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'status-popup';
-            errorDiv.innerHTML = `
-              <div class="status-popup-content">
-                  <div class="error-icon">
-                    <i class="fas fa-times-circle"></i>
-                  </div>
-                  <h3 class="status-title">Upload Failed</h3>
-                  <p>An error occurred: ${error.message}</p>
-                  <button class="status-close-btn">Close</button>
-              </div>`;
-            document.body.appendChild(errorDiv);
-            errorDiv.querySelector('.status-close-btn').addEventListener('click', () => {
-              errorDiv.remove();
-            });
-          })
-          .finally(() => {
-            submitButton.disabled = false;
-          });
+          .catch(chunkReject);
+        };
+        
+        reader.onerror = () => chunkReject(new Error('Failed to read file chunk'));
+        reader.readAsDataURL(chunk);
       });
     }
-  </script>
+    
+    // Upload chunks sequentially to avoid overwhelming the server
+    async function uploadAllChunks() {
+      try {
+        for (let i = 0; i < totalChunks; i++) {
+          const result = await uploadChunk(i);
+          if (result.isComplete) {
+            resolve(result);
+            return;
+          }
+        }
+      } catch (error) {
+        reject(error);
+      }
+    }
+    
+    uploadAllChunks();
+  });
+}
+
+// Update progress display
+function updateUploadProgress(fileName, progress, current, total) {
+  const loadingDiv = document.querySelector('.status-popup');
+  if (loadingDiv) {
+    const progressText = loadingDiv.querySelector('.status-title');
+    const progressDetails = loadingDiv.querySelector('p');
+    if (progressText) {
+      progressText.textContent = `Uploading: ${fileName}`;
+    }
+    if (progressDetails) {
+      progressDetails.innerHTML = `
+        Progress: ${Math.round(progress)}% (${current}/${total} chunks)<br>
+        Large files are uploaded in secure chunks for reliability.
+      `;
+    }
+  }
+}
+
+// Format file size for display
+function formatFileSize(bytes) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// Smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    document.querySelector(this.getAttribute('href')).scrollIntoView({
+      behavior: 'smooth'
+    });
+  });
+});
+
+// File selection display handler
+const fileInput = document.getElementById('attach');
+if (fileInput) {
+  fileInput.addEventListener('change', function() {
+    const files = this.files;
+    const fileUpload = this.parentElement;
+    const fileInfo = fileUpload.querySelector('p');
+
+    if (files.length > 0) {
+      let totalSize = Array.from(files).reduce((sum, file) => sum + file.size, 0);
+      let largeFiles = Array.from(files).filter(file => shouldUseChunkedUpload(file));
+      
+      let displayText = `${files.length} file(s) selected (${formatFileSize(totalSize)})`;
+      if (largeFiles.length > 0) {
+        displayText += `\n${largeFiles.length} large file(s) will use chunked upload`;
+      }
+      
+      fileInfo.textContent = displayText;
+      fileInfo.style.color = '#333';
+      fileInfo.style.whiteSpace = 'pre-line';
+    } else {
+      fileInfo.innerHTML = 'Click to upload or drag and drop';
+      fileInfo.style.color = '#666';
+      fileInfo.style.whiteSpace = 'normal';
+    }
+  });
+}
+
+// Enhanced form submission handler with chunked upload support
+const uploadForm = document.getElementById('uploadForm');
+if (uploadForm) {
+  uploadForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const form = this;
+    const fileInput = document.getElementById('attach');
+    const submitButton = form.querySelector('button[type="submit"]');
+    let loadingDiv = null;
+
+    // Check if files are selected
+    if (fileInput.files.length === 0) {
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'status-popup';
+      errorDiv.innerHTML = `
+        <div class="status-popup-content">
+            <div class="error-icon">
+              <i class="fas fa-times-circle"></i>
+            </div>
+            <h3 class="status-title">No Files Selected</h3>
+            <p>Please select at least one file to upload.</p>
+            <button class="status-close-btn">Close</button>
+        </div>`;
+      document.body.appendChild(errorDiv);
+      errorDiv.querySelector('.status-close-btn').addEventListener('click', () => {
+        errorDiv.remove();
+      });
+      return;
+    }
+
+    submitButton.disabled = true;
+
+    const files = Array.from(fileInput.files);
+    const formData = new FormData(form);
+    const sessionId = generateSessionId();
+    
+    // Analyze files for upload strategy
+    const smallFiles = files.filter(file => !shouldUseChunkedUpload(file));
+    const largeFiles = files.filter(file => shouldUseChunkedUpload(file));
+    
+    // Show loading indicator
+    loadingDiv = document.createElement('div');
+    loadingDiv.className = 'status-popup';
+    loadingDiv.innerHTML = `
+      <div class="status-popup-content">
+        <div class="loading-spinner"></div>
+        <h3 class="status-title">Preparing Upload...</h3>
+        <p>Processing ${files.length} file(s).<br>
+        ${smallFiles.length} small files, ${largeFiles.length} large files (chunked upload)</p>
+      </div>`;
+    document.body.appendChild(loadingDiv);
+
+    try {
+      const results = [];
+      
+      // Upload small files first (batch upload)
+      if (smallFiles.length > 0) {
+        const smallFilesData = await Promise.all(
+          smallFiles.map((file, index) => {
+            return new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = (event) => {
+                resolve({
+                  fileName: file.name,
+                  mimeType: file.type,
+                  data: event.target.result.split(',')[1],
+                  fileIndex: index
+                });
+              };
+              reader.onerror = () => reject(new Error(`Failed to read file: ${file.name}`));
+              reader.readAsDataURL(file);
+            });
+          })
+        );
+        
+        const submissionData = {
+          files: smallFilesData,
+          formData: {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            clinic: formData.get('clinic'),
+            service: formData.get('service'),
+            message: formData.get('message')
+          }
+        };
+        
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: JSON.stringify(submissionData),
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8',
+          },
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+          results.push(...(result.files || []));
+        } else {
+          throw new Error(result.error || 'Small files upload failed');
+        }
+      }
+
+      // Upload large files individually with chunked upload
+      for (const file of largeFiles) {
+        const result = await uploadFileInChunks(file, formData, sessionId + '_' + file.name);
+        if (result.success && result.files) {
+          results.push(...result.files);
+        }
+      }
+
+      // Remove loading indicator
+      if (loadingDiv) loadingDiv.remove();
+
+      // Show success message
+      const successDiv = document.createElement('div');
+      successDiv.className = 'status-popup';
+      successDiv.innerHTML = `
+        <div class="status-popup-content">
+          <div class="success-checkmark">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h3 class="status-title">Upload Successful!</h3>
+          <p style="margin-bottom: 15px;">All ${files.length} file(s) have been uploaded successfully!</p>
+          <div style="text-align: left; font-size: 14px; color: #666;">
+            <p>✓ Small files: ${smallFiles.length} (batch upload)</p>
+            <p>✓ Large files: ${largeFiles.length} (chunked upload)</p>
+          </div>
+          ${results.length > 0 ? 
+            `<div style="max-height: 100px; overflow-y: auto; margin-top: 15px;">
+              ${results.map(file => `<p style="font-size: 12px;"><strong>${file.name}</strong></p>`).join('')}
+            </div>` : ''}
+          <button class="status-close-btn">Close</button>
+        </div>`;
+      document.body.appendChild(successDiv);
+
+      successDiv.querySelector('.status-close-btn').addEventListener('click', () => {
+        successDiv.remove();
+      });
+
+      form.reset();
+      const fileInfo = form.querySelector('.file-upload p');
+      if(fileInfo) {
+        fileInfo.innerHTML = 'Click to upload or drag and drop';
+        fileInfo.style.color = '#666';
+        fileInfo.style.whiteSpace = 'normal';
+      }
+
+    } catch (error) {
+      console.error('Error:', error);
+      if (loadingDiv) loadingDiv.remove();
+
+      // Show error message
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'status-popup';
+      errorDiv.innerHTML = `
+        <div class="status-popup-content">
+            <div class="error-icon">
+              <i class="fas fa-times-circle"></i>
+            </div>
+            <h3 class="status-title">Upload Failed</h3>
+            <p>An error occurred: ${error.message}</p>
+            <p style="font-size: 12px; color: #666;">Please try again or contact support if the problem persists.</p>
+            <button class="status-close-btn">Close</button>
+        </div>`;
+      document.body.appendChild(errorDiv);
+      errorDiv.querySelector('.status-close-btn').addEventListener('click', () => {
+        errorDiv.remove();
+      });
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+}
+</script>
+
 </body>
 </html>
