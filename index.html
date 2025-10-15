@@ -837,8 +837,8 @@
   </footer>
 
   <script>
-// Chunked upload configuration - Reduced size for better reliability
-const CHUNK_SIZE = 2 * 1024 * 1024; // 2MB chunks (smaller for better handling)
+// Chunked upload configuration - Even smaller chunks for better reliability
+const CHUNK_SIZE = 1 * 1024 * 1024; // 1MB chunks (very conservative)
 
 // Generate unique session ID for chunked uploads
 function generateSessionId() {
