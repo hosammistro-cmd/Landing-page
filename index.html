@@ -753,9 +753,8 @@
             <input type="text" id="clinic" name="clinic" placeholder="Your Dental Clinic" required>
           </div>
           <div class="form-group">
-            <label for="service">Service Required</label>
-            <select id="service" name="service" multiple required style="min-height: 120px;">
-              <option value="">Select service(s) (hold Ctrl/Cmd to select multiple)</option>
+            <label for="service">Service Required (select multiple options)</label>
+            <select id="service" name="service[]" multiple required style="min-height: 120px;">
               <option value="crown">Crown Design</option>
               <option value="bridge">Bridge Design</option>
               <option value="implant-guide">Surgical Guide</option>
@@ -769,14 +768,10 @@
               <option value="prosthetic">Prosthetic Design</option>
               <option value="other">Other</option>
             </select>
-            <select id="service" name="service" required>
-              <option value="">Select a service</option>
-              <option value="crown">Crown Design</option>
-              <option value="bridge">Bridge Design</option>
-              <option value="implant-guide">Surgical Guide</option>
-              <option value="prosthetic">Prosthetic Design</option>
-              <option value="other">Other</option>
-            </select>
+            <p class="select-help" style="font-size: 12px; color: #666; margin-top: 5px;">
+              <i class="fas fa-info-circle"></i> 
+              Click the dropdown and hold Ctrl (Windows) or Cmd (Mac) to select multiple services
+            </p>
           </div>
           <div class="form-group">
             <label for="notes">Additional Notes</label>
