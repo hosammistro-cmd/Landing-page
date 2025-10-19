@@ -753,8 +753,8 @@
             <input type="text" id="clinic" name="clinic" placeholder="Your Dental Clinic" required>
           </div>
           <div class="form-group">
-            <label for="service">Service Required (select multiple options)</label>
-            <select id="service" name="service[]" multiple required style="min-height: 120px;">
+            <label for="service">Service Required</label>
+            <select id="service" name="service[]" multiple required style="min-height: 120px; padding: 10px; border-radius: 5px; border-color: #ddd;">
               <option value="crown">Crown Design</option>
               <option value="bridge">Bridge Design</option>
               <option value="implant-guide">Surgical Guide</option>
@@ -768,10 +768,32 @@
               <option value="prosthetic">Prosthetic Design</option>
               <option value="other">Other</option>
             </select>
-            <p class="select-help" style="font-size: 12px; color: #666; margin-top: 5px;">
+            <p class="select-help" style="font-size: 14px; color: #666; margin-top: 8px;">
               <i class="fas fa-info-circle"></i> 
-              Click the dropdown and hold Ctrl (Windows) or Cmd (Mac) to select multiple services
+              Select multiple services by holding <strong>Ctrl</strong> (Windows) or <strong>Cmd</strong> (Mac) while clicking
             </p>
+            <style>
+              #service option {
+                padding: 8px 12px;
+                margin: 2px 0;
+                border-radius: 4px;
+              }
+              #service option:checked {
+                background: #0056b3 linear-gradient(0deg, #0056b3 0%, #0056b3 100%);
+                color: white;
+              }
+              #service option:hover {
+                background-color: #f0f0f0;
+              }
+              @media (max-width: 768px) {
+                #service {
+                  font-size: 16px;
+                }
+                .select-help {
+                  font-size: 13px !important;
+                }
+              }
+            </style>
           </div>
           <div class="form-group">
             <label for="notes">Additional Notes</label>
