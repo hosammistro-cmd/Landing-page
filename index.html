@@ -574,6 +574,231 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+
+    /* Order Form Styles */
+    .order-form-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .form-title {
+      font-size: 24px;
+      margin-bottom: 25px;
+      color: #0056b3;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .form-section {
+      margin-bottom: 30px;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+    
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -10px;
+    }
+    
+    .form-group {
+      flex: 1 0 300px;
+      padding: 0 10px;
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    
+    .form-control:focus {
+      border-color: #0056b3;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0,86,179,0.2);
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .checkbox-group input {
+      margin-right: 10px;
+    }
+    
+    .checkbox-horizontal {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 10px;
+    }
+    
+    .checkbox-horizontal .checkbox-group {
+      flex: 0 0 calc(33.333% - 20px);
+      margin-bottom: 15px;
+    }
+    
+    /* Teeth Selection Styles */
+    .teeth-selection {
+      margin-top: 20px;
+    }
+    
+    .teeth-chart {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .teeth-row {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    
+    .tooth {
+      width: 40px;
+      height: 50px;
+      margin: 0 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      background-color: #f9f9f9;
+    }
+    
+    .tooth.selected {
+      background-color: #0056b3;
+      color: white;
+      border-color: #0056b3;
+    }
+    
+    .tooth-number {
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .tooth-label {
+      font-size: 10px;
+      margin-top: 2px;
+    }
+    
+    .jaw-label {
+      font-weight: bold;
+      margin: 10px 0;
+      text-align: center;
+    }
+    
+    .selected-teeth-display {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      border: 1px solid #e9ecef;
+    }
+    
+    .selected-teeth-display h4 {
+      margin-bottom: 10px;
+      color: #0056b3;
+    }
+    
+    /* File Upload Styles for Order Form */
+    .file-list {
+      margin-top: 20px;
+    }
+    
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background: #f9f9f9;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    
+    .file-name {
+      flex-grow: 1;
+    }
+
+    .file-size {
+      margin-right: 15px;
+      color: #666;
+      font-size: 14px;
+    }
+    
+    .file-remove {
+      color: #e74c3c;
+      cursor: pointer;
+      margin-left: 10px;
+      font-weight: bold;
+    }
+
+    .file-remove:hover {
+      color: #c0392b;
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #545b62;
+    }
+    
+    /* Responsive Styles for Order Form */
+    @media (max-width: 768px) {
+      .form-actions {
+        flex-direction: column;
+      }
+      
+      .checkbox-horizontal .checkbox-group {
+        flex: 0 0 100%;
+      }
+      
+      .tooth {
+        width: 30px;
+        height: 40px;
+      }
+      
+      .tooth-number {
+        font-size: 10px;
+      }
+      
+      .tooth-label {
+        font-size: 8px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -734,81 +959,297 @@
   <!-- Upload Section -->
   <section id="upload">
     <div class="container">
-      <div class="section-header">
-        <h2>Upload Files</h2>
-        <p>Securely submit your dental scans and receive professional designs</p>
-      </div>
-      <div class="upload-container">
-        <form class="upload-form" id="uploadForm" action="https://207.154.244.220/api/upload" method="POST" enctype="multipart/form-data">
-          <div class="form-group">
-            <label for="doctor">Your Name</label>
-            <input type="text" id="doctor" name="name" placeholder="Dr. John Smith" required>
-          </div>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
-          </div>
-          <div class="form-group">
-            <label for="clinic">Clinic Name</label>
-            <input type="text" id="clinic" name="clinic" placeholder="Your Dental Clinic" required>
-          </div>
-          <div class="form-group">
-            <label for="service">Service Required</label>
-            <select id="service" name="service[]" multiple required style="min-height: 120px; padding: 10px; border-radius: 5px; border-color: #ddd;">
-              <option value="crown">Crown Design</option>
-              <option value="bridge">Bridge Design</option>
-              <option value="implant-guide">Surgical Guide</option>
-              <option value="implant-planning">Implant Planning</option>
-              <option value="stackable-guides">Stackable Guides</option>
-              <option value="full-arch-bridges">Full Arch Bridges</option>
-              <option value="all-on-x">All on X Cases</option>
-              <option value="custom-trays">Custom Trays</option>
-              <option value="custom-healing-abutment">Custom Healing Abutment</option>
-              <option value="custom-abutment">Custom Abutment</option>
-              <option value="prosthetic">Prosthetic Design</option>
-              <option value="other">Other</option>
-            </select>
-            <p class="select-help" style="font-size: 14px; color: #666; margin-top: 8px;">
-              <i class="fas fa-info-circle"></i> 
-              Select multiple services by holding <strong>Ctrl</strong> (Windows) or <strong>Cmd</strong> (Mac) while clicking
-            </p>
-            <style>
-              #service option {
-                padding: 8px 12px;
-                margin: 2px 0;
-                border-radius: 4px;
-              }
-              #service option:checked {
-                background: #0056b3 linear-gradient(0deg, #0056b3 0%, #0056b3 100%);
-                color: white;
-              }
-              #service option:hover {
-                background-color: #f0f0f0;
-              }
-              @media (max-width: 768px) {
-                #service {
-                  font-size: 16px;
-                }
-                .select-help {
-                  font-size: 13px !important;
-                }
-              }
-            </style>
-          </div>
-          <div class="form-group">
-            <label for="notes">Additional Notes</label>
-            <textarea id="notes" name="message" placeholder="Any specific requirements or instructions..."></textarea>
-          </div>
-          <div class="form-group">
-            <label>Upload Files</label>
-            <div class="file-upload">
-              <i class="fas fa-cloud-upload-alt"></i>
-              <p id="upload-text">Click to upload or drag and drop</p>
-              <p>STL, DICOM, 3D scan files, and compressed archives (ZIP, RAR, 7Z)</p>
-              <input type="file" id="attach" name="attach" accept=".stl,.dcm,.obj,.ply,.zip,.rar,.7z,.tar,.gz,.tar.gz" multiple required>
+      <div class="order-form-container">
+        <h2 class="form-title">Order Smile in a Box</h2>
+        
+        <form id="orderForm">
+          <!-- Customer Information Section -->
+          <div class="form-section">
+            <h3 class="section-title">Customer Information</h3>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name *</label>
+                <input type="text" id="firstName" class="form-control" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="lastName">Last Name *</label>
+                <input type="text" id="lastName" class="form-control" required>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" class="form-control" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="phone">Phone *</label>
+                <input type="tel" id="phone" class="form-control" required>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="clinicName">Clinic Name *</label>
+                <input type="text" id="clinicName" class="form-control" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="clinicId">Clinic ID</label>
+                <input type="text" id="clinicId" class="form-control">
+              </div>
             </div>
           </div>
-          <button type="submit" class="submit-btn">Submit Files</button>
+          
+          <!-- Order Details Section -->
+          <div class="form-section">
+            <h3 class="section-title">Order Details</h3>
+            
+            <div class="form-group">
+              <label for="productType">Product Type *</label>
+              <div class="checkbox-horizontal">
+                <div class="checkbox-group">
+                  <input type="checkbox" id="crown" name="productType" value="crown">
+                  <label for="crown">Crown</label>
+                </div>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="bridge" name="productType" value="bridge">
+                  <label for="bridge">Bridge</label>
+                </div>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="surgical-guide" name="productType" value="surgical-guide">
+                  <label for="surgical-guide">Surgical Guide</label>
+                </div>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="implant" name="productType" value="implant">
+                  <label for="implant">Implant</label>
+                </div>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="stackable-guides" name="productType" value="stackable-guides">
+                  <label for="stackable-guides">Stackable Guides</label>
+                </div>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="all-on-x" name="productType" value="all-on-x">
+                  <label for="all-on-x">All-on-X</label>
+                </div>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="cases" name="productType" value="cases">
+                  <label for="cases">Cases</label>
+                </div>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="custom-trays" name="productType" value="custom-trays">
+                  <label for="custom-trays">Custom Trays</label>
+                </div>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="custom-healing-abutment" name="productType" value="custom-healing-abutment">
+                  <label for="custom-healing-abutment">Custom Healing Abutment</label>
+                </div>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="custom-abutment" name="productType" value="custom-abutment">
+                  <label for="custom-abutment">Custom Abutment</label>
+                </div>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="prosthetic-design" name="productType" value="prosthetic-design">
+                  <label for="prosthetic-design">Prosthetic Design</label>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="deliveryDate">Preferred Delivery Date</label>
+                <input type="date" id="deliveryDate" class="form-control">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="notes">Order Notes</label>
+              <textarea id="notes" class="form-control" rows="4" placeholder="Any special requests or instructions..."></textarea>
+            </div>
+          </div>
+          
+          <!-- Teeth Selection Section -->
+          <div class="form-section">
+            <h3 class="section-title">Teeth Selection</h3>
+            <p>Select the teeth you want to include in your order:</p>
+            
+            <div class="teeth-selection">
+              <div class="teeth-chart">
+                <div class="jaw-label">Upper Jaw (Maxillary)</div>
+                <div class="teeth-row">
+                  <!-- Right side upper teeth (18-11) -->
+                  <div class="tooth" data-tooth="18">
+                    <div class="tooth-number">18</div>
+                    <div class="tooth-label">Wisdom</div>
+                  </div>
+                  <div class="tooth" data-tooth="17">
+                    <div class="tooth-number">17</div>
+                    <div class="tooth-label">Molar</div>
+                  </div>
+                  <div class="tooth" data-tooth="16">
+                    <div class="tooth-number">16</div>
+                    <div class="tooth-label">Molar</div>
+                  </div>
+                  <div class="tooth" data-tooth="15">
+                    <div class="tooth-number">15</div>
+                    <div class="tooth-label">Premolar</div>
+                  </div>
+                  <div class="tooth" data-tooth="14">
+                    <div class="tooth-number">14</div>
+                    <div class="tooth-label">Premolar</div>
+                  </div>
+                  <div class="tooth" data-tooth="13">
+                    <div class="tooth-number">13</div>
+                    <div class="tooth-label">Canine</div>
+                  </div>
+                  <div class="tooth" data-tooth="12">
+                    <div class="tooth-number">12</div>
+                    <div class="tooth-label">Incisor</div>
+                  </div>
+                  <div class="tooth" data-tooth="11">
+                    <div class="tooth-number">11</div>
+                    <div class="tooth-label">Incisor</div>
+                  </div>
+                  
+                  <!-- Left side upper teeth (21-28) -->
+                  <div class="tooth" data-tooth="21">
+                    <div class="tooth-number">21</div>
+                    <div class="tooth-label">Incisor</div>
+                  </div>
+                  <div class="tooth" data-tooth="22">
+                    <div class="tooth-number">22</div>
+                    <div class="tooth-label">Incisor</div>
+                  </div>
+                  <div class="tooth" data-tooth="23">
+                    <div class="tooth-number">23</div>
+                    <div class="tooth-label">Canine</div>
+                  </div>
+                  <div class="tooth" data-tooth="24">
+                    <div class="tooth-number">24</div>
+                    <div class="tooth-label">Premolar</div>
+                  </div>
+                  <div class="tooth" data-tooth="25">
+                    <div class="tooth-number">25</div>
+                    <div class="tooth-label">Premolar</div>
+                  </div>
+                  <div class="tooth" data-tooth="26">
+                    <div class="tooth-number">26</div>
+                    <div class="tooth-label">Molar</div>
+                  </div>
+                  <div class="tooth" data-tooth="27">
+                    <div class="tooth-number">27</div>
+                    <div class="tooth-label">Molar</div>
+                  </div>
+                  <div class="tooth" data-tooth="28">
+                    <div class="tooth-number">28</div>
+                    <div class="tooth-label">Wisdom</div>
+                  </div>
+                </div>
+                
+                <div class="jaw-label">Lower Jaw (Mandibular)</div>
+                <div class="teeth-row">
+                  <!-- Right side lower teeth (48-41) -->
+                  <div class="tooth" data-tooth="48">
+                    <div class="tooth-number">48</div>
+                    <div class="tooth-label">Wisdom</div>
+                  </div>
+                  <div class="tooth" data-tooth="47">
+                    <div class="tooth-number">47</div>
+                    <div class="tooth-label">Molar</div>
+                  </div>
+                  <div class="tooth" data-tooth="46">
+                    <div class="tooth-number">46</div>
+                    <div class="tooth-label">Molar</div>
+                  </div>
+                  <div class="tooth" data-tooth="45">
+                    <div class="tooth-number">45</div>
+                    <div class="tooth-label">Premolar</div>
+                  </div>
+                  <div class="tooth" data-tooth="44">
+                    <div class="tooth-number">44</div>
+                    <div class="tooth-label">Premolar</div>
+                  </div>
+                  <div class="tooth" data-tooth="43">
+                    <div class="tooth-number">43</div>
+                    <div class="tooth-label">Canine</div>
+                  </div>
+                  <div class="tooth" data-tooth="42">
+                    <div class="tooth-number">42</div>
+                    <div class="tooth-label">Incisor</div>
+                  </div>
+                  <div class="tooth" data-tooth="41">
+                    <div class="tooth-number">41</div>
+                    <div class="tooth-label">Incisor</div>
+                  </div>
+                  
+                  <!-- Left side lower teeth (31-38) -->
+                  <div class="tooth" data-tooth="31">
+                    <div class="tooth-number">31</div>
+                    <div class="tooth-label">Incisor</div>
+                  </div>
+                  <div class="tooth" data-tooth="32">
+                    <div class="tooth-number">32</div>
+                    <div class="tooth-label">Incisor</div>
+                  </div>
+                  <div class="tooth" data-tooth="33">
+                    <div class="tooth-number">33</div>
+                    <div class="tooth-label">Canine</div>
+                  </div>
+                  <div class="tooth" data-tooth="34">
+                    <div class="tooth-number">34</div>
+                    <div class="tooth-label">Premolar</div>
+                  </div>
+                  <div class="tooth" data-tooth="35">
+                    <div class="tooth-number">35</div>
+                    <div class="tooth-label">Premolar</div>
+                  </div>
+                  <div class="tooth" data-tooth="36">
+                    <div class="tooth-number">36</div>
+                    <div class="tooth-label">Molar</div>
+                  </div>
+                  <div class="tooth" data-tooth="37">
+                    <div class="tooth-number">37</div>
+                    <div class="tooth-label">Molar</div>
+                  </div>
+                  <div class="tooth" data-tooth="38">
+                    <div class="tooth-number">38</div>
+                    <div class="tooth-label">Wisdom</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="selected-teeth-display">
+                <h4>Selected Teeth:</h4>
+                <div id="selectedTeethList">No teeth selected</div>
+                <input type="hidden" id="selectedTeeth" name="selectedTeeth">
+              </div>
+            </div>
+          </div>
+          
+          <!-- File Upload Section -->
+          <div class="form-section">
+            <h3 class="section-title">Upload Files</h3>
+            
+            <div class="file-upload" id="dropArea">
+              <p>Drag your files here or</p>
+              <input type="file" id="fileInput" multiple style="display: none;">
+              <button type="button" class="btn" id="browseBtn">Select Files</button>
+              <p>Supported formats: STL, PLY, OBJ, 3MF (Max. 100MB per file)</p>
+            </div>
+            
+            <div class="file-list" id="fileList">
+              <!-- Uploaded files will appear here -->
+            </div>
+          </div>
+          
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="resetBtn">Reset</button>
+            <button type="submit" class="btn">Submit Order</button>
+          </div>
         </form>
       </div>
     </div>
@@ -869,341 +1310,325 @@
   </footer>
 
   <script>
-// Chunked upload configuration - Even smaller chunks for better reliability
-const CHUNK_SIZE = 1 * 1024 * 1024; // 1MB chunks (very conservative)
-
-// Generate unique session ID for chunked uploads
-function generateSessionId() {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2);
-}
-
-// Check if file should use chunked upload
-function shouldUseChunkedUpload(file) {
-  return file.size > CHUNK_SIZE;
-}
-
-// Upload file in chunks for large files
-function uploadFileInChunks(file, formData, sessionId) {
-  return new Promise((resolve, reject) => {
-    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
-    let uploadedChunks = 0;
-    
-    function uploadChunk(chunkIndex) {
-      return new Promise((chunkResolve, chunkReject) => {
-        const start = chunkIndex * CHUNK_SIZE;
-        const end = Math.min(start + CHUNK_SIZE, file.size);
-        const chunk = file.slice(start, end);
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const chunkData = {
-            action: 'uploadChunk',
-            fileName: file.name,
-            chunkIndex: chunkIndex,
-            totalChunks: totalChunks,
-            chunkData: e.target.result.split(',')[1], // Base64 data
-            sessionId: sessionId,
-            formData: {
-              name: formData.get('name'),
-              email: formData.get('email'),
-              clinic: formData.get('clinic'),
-              service: formData.get('service'),
-              message: formData.get('message')
-            }
-          };
+    document.addEventListener('DOMContentLoaded', function() {
+      const fileInput = document.getElementById('fileInput');
+      const browseBtn = document.getElementById('browseBtn');
+      const dropArea = document.getElementById('dropArea');
+      const fileList = document.getElementById('fileList');
+      const resetBtn = document.getElementById('resetBtn');
+      const orderForm = document.getElementById('orderForm');
+      const teethElements = document.querySelectorAll('.tooth');
+      const selectedTeethList = document.getElementById('selectedTeethList');
+      const selectedTeethInput = document.getElementById('selectedTeeth');
+      
+      let uploadedFiles = [];
+      let selectedTeeth = [];
+      
+      // Teeth selection functionality
+      teethElements.forEach(tooth => {
+        tooth.addEventListener('click', function() {
+          const toothNumber = this.getAttribute('data-tooth');
           
-          fetch(document.getElementById('uploadForm').action, {
-            method: 'POST',
-            body: JSON.stringify(chunkData),
-            headers: {
-              'Content-Type': 'text/plain;charset=utf-8',
-            },
-          })
-          .then(response => response.json())
-          .then(result => {
-            if (result.success) {
-              uploadedChunks++;
-              
-              // Update progress
-              const progress = (uploadedChunks / totalChunks) * 100;
-              updateUploadProgress(file.name, progress, uploadedChunks, totalChunks);
-              
-              if (result.isComplete) {
-                chunkResolve(result);
-              } else {
-                chunkResolve({ success: true, progress: progress });
-              }
-            } else {
-              chunkReject(new Error(result.error || 'Chunk upload failed'));
-            }
-          })
-          .catch(chunkReject);
-        };
-        
-        reader.onerror = () => chunkReject(new Error('Failed to read file chunk'));
-        reader.readAsDataURL(chunk);
-      });
-    }
-    
-    // Upload chunks sequentially to avoid overwhelming the server
-    async function uploadAllChunks() {
-      try {
-        for (let i = 0; i < totalChunks; i++) {
-          const result = await uploadChunk(i);
-          if (result.isComplete) {
-            resolve(result);
-            return;
+          if (this.classList.contains('selected')) {
+            // Deselect tooth
+            this.classList.remove('selected');
+            selectedTeeth = selectedTeeth.filter(t => t !== toothNumber);
+          } else {
+            // Select tooth
+            this.classList.add('selected');
+            selectedTeeth.push(toothNumber);
           }
+          
+          updateSelectedTeethDisplay();
+        });
+      });
+      
+      function updateSelectedTeethDisplay() {
+        if (selectedTeeth.length === 0) {
+          selectedTeethList.textContent = 'No teeth selected';
+          selectedTeethInput.value = '';
+        } else {
+          selectedTeethList.textContent = selectedTeeth.sort((a, b) => a - b).join(', ');
+          selectedTeethInput.value = selectedTeeth.join(',');
         }
-      } catch (error) {
-        reject(error);
-      }
-    }
-    
-    uploadAllChunks();
-  });
-}
-
-// Update progress display
-function updateUploadProgress(fileName, progress, current, total) {
-  const loadingDiv = document.querySelector('.status-popup');
-  if (loadingDiv) {
-    const progressText = loadingDiv.querySelector('.status-title');
-    const progressDetails = loadingDiv.querySelector('p');
-    if (progressText) {
-      progressText.textContent = `Uploading: ${fileName}`;
-    }
-    if (progressDetails) {
-      progressDetails.innerHTML = `
-        Progress: ${Math.round(progress)}% (${current}/${total} chunks)<br>
-        Large files are uploaded in secure chunks for reliability.
-      `;
-    }
-  }
-}
-
-// Format file size for display
-function formatFileSize(bytes) {
-  if (bytes === 0) return '0 Bytes';
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
-
-// Smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    e.preventDefault();
-    document.querySelector(this.getAttribute('href')).scrollIntoView({
-      behavior: 'smooth'
-    });
-  });
-});
-
-// File selection display handler
-const fileInput = document.getElementById('attach');
-if (fileInput) {
-  fileInput.addEventListener('change', function() {
-    const files = this.files;
-    const fileUpload = this.parentElement;
-    const fileInfo = fileUpload.querySelector('p');
-
-    if (files.length > 0) {
-      let totalSize = Array.from(files).reduce((sum, file) => sum + file.size, 0);
-      let largeFiles = Array.from(files).filter(file => shouldUseChunkedUpload(file));
-      
-      let displayText = `${files.length} file(s) selected (${formatFileSize(totalSize)})`;
-      if (largeFiles.length > 0) {
-        displayText += `\n${largeFiles.length} large file(s) will use chunked upload`;
       }
       
-      fileInfo.textContent = displayText;
-      fileInfo.style.color = '#333';
-      fileInfo.style.whiteSpace = 'pre-line';
-    } else {
-      fileInfo.innerHTML = 'Click to upload or drag and drop';
-      fileInfo.style.color = '#666';
-      fileInfo.style.whiteSpace = 'normal';
-    }
-  });
-}
-
-// Enhanced form submission handler with chunked upload support
-const uploadForm = document.getElementById('uploadForm');
-if (uploadForm) {
-  uploadForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const form = this;
-    const fileInput = document.getElementById('attach');
-    const submitButton = form.querySelector('button[type="submit"]');
-    let loadingDiv = null;
-
-    // Check if files are selected
-    if (fileInput.files.length === 0) {
-      const errorDiv = document.createElement('div');
-      errorDiv.className = 'status-popup';
-      errorDiv.innerHTML = `
-        <div class="status-popup-content">
-            <div class="error-icon">
-              <i class="fas fa-times-circle"></i>
-            </div>
-            <h3 class="status-title">No Files Selected</h3>
-            <p>Please select at least one file to upload.</p>
-            <button class="status-close-btn">Close</button>
-        </div>`;
-      document.body.appendChild(errorDiv);
-      errorDiv.querySelector('.status-close-btn').addEventListener('click', () => {
-        errorDiv.remove();
+      // Browse button click handler
+      browseBtn.addEventListener('click', function() {
+        fileInput.click();
       });
-      return;
-    }
-
-    submitButton.disabled = true;
-
-    const files = Array.from(fileInput.files);
-    const formData = new FormData(form);
-    const sessionId = generateSessionId();
-    
-    // Analyze files for upload strategy
-    const smallFiles = files.filter(file => !shouldUseChunkedUpload(file));
-    const largeFiles = files.filter(file => shouldUseChunkedUpload(file));
-    
-    // Show loading indicator
-    loadingDiv = document.createElement('div');
-    loadingDiv.className = 'status-popup';
-    loadingDiv.innerHTML = `
-      <div class="status-popup-content">
-        <div class="loading-spinner"></div>
-        <h3 class="status-title">Preparing Upload...</h3>
-        <p>Processing ${files.length} file(s).<br>
-        ${smallFiles.length} small files, ${largeFiles.length} large files (chunked upload)</p>
-      </div>`;
-    document.body.appendChild(loadingDiv);
-
-    try {
-      const results = [];
       
-      // Upload small files first (batch upload)
-      if (smallFiles.length > 0) {
-        const smallFilesData = await Promise.all(
-          smallFiles.map((file, index) => {
-            return new Promise((resolve, reject) => {
-              const reader = new FileReader();
-              reader.onload = (event) => {
-                resolve({
-                  fileName: file.name,
-                  mimeType: file.type,
-                  data: event.target.result.split(',')[1],
-                  fileIndex: index
-                });
-              };
-              reader.onerror = () => reject(new Error(`Failed to read file: ${file.name}`));
-              reader.readAsDataURL(file);
-            });
-          })
-        );
-        
-        const submissionData = {
-          files: smallFilesData,
-          formData: {
-            name: formData.get('name'),
-            email: formData.get('email'),
-            clinic: formData.get('clinic'),
-            service: formData.get('service'),
-            message: formData.get('message')
+      // File input change handler
+      fileInput.addEventListener('change', function() {
+        handleFiles(this.files);
+      });
+      
+      // Drag and drop handlers
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+      });
+      
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+      });
+      
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+      });
+      
+      function highlight() {
+        dropArea.style.borderColor = '#0056b3';
+        dropArea.style.backgroundColor = '#f0f8ff';
+      }
+      
+      function unhighlight() {
+        dropArea.style.borderColor = '#ddd';
+        dropArea.style.backgroundColor = '';
+      }
+      
+      dropArea.addEventListener('drop', function(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+      });
+      
+      // Handle selected files
+      function handleFiles(files) {
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          
+          // Check file size (max 100MB)
+          if (file.size > 100 * 1024 * 1024) {
+            alert('File "' + file.name + '" is too large. Maximum file size is 100MB.');
+            continue;
           }
-        };
+          
+          // Check file type
+          const allowedTypes = ['.stl', '.ply', '.obj', '.3mf'];
+          const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+          
+          if (!allowedTypes.includes(fileExtension)) {
+            alert('File "' + file.name + '" has an invalid type. Only STL, PLY, OBJ and 3MF files are allowed.');
+            continue;
+          }
+          
+          uploadedFiles.push(file);
+          displayFile(file);
+        }
+      }
+      
+      // Display file in the file list
+      function displayFile(file) {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
         
-        const response = await fetch(form.action, {
-          method: 'POST',
-          body: JSON.stringify(submissionData),
-          headers: {
-            'Content-Type': 'text/plain;charset=utf-8',
-          },
+        const fileName = document.createElement('span');
+        fileName.className = 'file-name';
+        fileName.textContent = file.name;
+        
+        const fileSize = document.createElement('span');
+        fileSize.className = 'file-size';
+        fileSize.textContent = formatFileSize(file.size);
+        
+        const fileRemove = document.createElement('span');
+        fileRemove.className = 'file-remove';
+        fileRemove.textContent = '✕';
+        fileRemove.addEventListener('click', function() {
+          removeFile(file, fileItem);
         });
         
-        const result = await response.json();
-        if (result.success) {
-          results.push(...(result.files || []));
-        } else {
-          throw new Error(result.error || 'Small files upload failed');
-        }
+        fileItem.appendChild(fileName);
+        fileItem.appendChild(fileSize);
+        fileItem.appendChild(fileRemove);
+        
+        fileList.appendChild(fileItem);
       }
-
-      // Upload large files individually with chunked upload
-      for (const file of largeFiles) {
-        const result = await uploadFileInChunks(file, formData, sessionId + '_' + file.name);
-        if (result.success && result.files) {
-          results.push(...result.files);
-        }
+      
+      // Format file size
+      function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
       }
-
-      // Remove loading indicator
-      if (loadingDiv) loadingDiv.remove();
-
-      // Show success message
-      const successDiv = document.createElement('div');
-      successDiv.className = 'status-popup';
-      successDiv.innerHTML = `
-        <div class="status-popup-content">
-          <div class="success-checkmark">
-            <i class="fas fa-check-circle"></i>
-          </div>
-          <h3 class="status-title">Upload Successful!</h3>
-          <p style="margin-bottom: 15px;">All ${files.length} file(s) have been uploaded successfully!</p>
-          <div style="text-align: left; font-size: 14px; color: #666;">
-            <p>✓ Small files: ${smallFiles.length} (batch upload)</p>
-            <p>✓ Large files: ${largeFiles.length} (chunked upload)</p>
-          </div>
-          ${results.length > 0 ? 
-            `<div style="max-height: 100px; overflow-y: auto; margin-top: 15px;">
-              ${results.map(file => `<p style="font-size: 12px;"><strong>${file.name}</strong></p>`).join('')}
-            </div>` : ''}
-          <button class="status-close-btn">Close</button>
-        </div>`;
-      document.body.appendChild(successDiv);
-
-      successDiv.querySelector('.status-close-btn').addEventListener('click', () => {
-        successDiv.remove();
+      
+      // Remove file from the list
+      function removeFile(file, fileElement) {
+        const index = uploadedFiles.indexOf(file);
+        if (index > -1) {
+          uploadedFiles.splice(index, 1);
+        }
+        fileElement.remove();
+      }
+      
+      // Reset form
+      resetBtn.addEventListener('click', function() {
+        orderForm.reset();
+        uploadedFiles = [];
+        fileList.innerHTML = '';
+        selectedTeeth = [];
+        teethElements.forEach(tooth => {
+          tooth.classList.remove('selected');
+        });
+        updateSelectedTeethDisplay();
+      });
+      
+      // Form submission
+      orderForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Check if at least one product type is selected
+        const productTypeCheckboxes = document.querySelectorAll('input[name="productType"]:checked');
+        if (productTypeCheckboxes.length === 0) {
+          alert('Please select at least one product type.');
+          return;
+        }
+        
+        // Check if files are uploaded
+        if (uploadedFiles.length === 0) {
+          alert('You must upload at least one file.');
+          return;
+        }
+        
+        // Show loading popup
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'status-popup';
+        loadingDiv.innerHTML = `
+          <div class="status-popup-content">
+            <div class="loading-spinner"></div>
+            <h3 class="status-title">Submitting Your Order...</h3>
+            <p>Please wait while we process your order and upload your files.</p>
+          </div>`;
+        document.body.appendChild(loadingDiv);
+        
+        try {
+          // Prepare form data
+          const formData = new FormData();
+          formData.append('firstName', document.getElementById('firstName').value);
+          formData.append('lastName', document.getElementById('lastName').value);
+          formData.append('email', document.getElementById('email').value);
+          formData.append('phone', document.getElementById('phone').value);
+          formData.append('clinicName', document.getElementById('clinicName').value);
+          formData.append('clinicId', document.getElementById('clinicId').value);
+          formData.append('deliveryDate', document.getElementById('deliveryDate').value);
+          formData.append('notes', document.getElementById('notes').value);
+          formData.append('selectedTeeth', selectedTeethInput.value);
+          
+          // Add all selected product types
+          productTypeCheckboxes.forEach(checkbox => {
+            formData.append('productType', checkbox.value);
+          });
+          
+          // Add all files
+          uploadedFiles.forEach(file => {
+            formData.append('files', file);
+          });
+          
+          // Submit to backend
+          const response = await fetch('http://localhost:3000/api/order', {
+            method: 'POST',
+            body: formData
+          });
+          
+          const result = await response.json();
+          
+          // Remove loading popup
+          loadingDiv.remove();
+          
+          if (result.success) {
+            // Show success message
+            const successDiv = document.createElement('div');
+            successDiv.className = 'status-popup';
+            successDiv.innerHTML = `
+              <div class="status-popup-content">
+                <div class="success-checkmark">
+                  <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="status-title">Order Submitted Successfully!</h3>
+                <p>Thank you for your order! We have received your files and will get back to you as soon as possible.</p>
+                <p style="font-size: 14px; color: #666; margin-top: 10px;">
+                  Order ID: ${result.orderId || 'N/A'}<br>
+                  Files Uploaded: ${result.filesUploaded || uploadedFiles.length}<br>
+                  A confirmation email has been sent to your email address.
+                </p>
+                <button class="status-close-btn">Close</button>
+              </div>`;
+            document.body.appendChild(successDiv);
+            
+            successDiv.querySelector('.status-close-btn').addEventListener('click', () => {
+              successDiv.remove();
+            });
+            
+            // Reset form after successful submission
+            orderForm.reset();
+            uploadedFiles = [];
+            fileList.innerHTML = '';
+            selectedTeeth = [];
+            teethElements.forEach(tooth => {
+              tooth.classList.remove('selected');
+            });
+            updateSelectedTeethDisplay();
+          } else {
+            throw new Error(result.error || 'Order submission failed');
+          }
+          
+        } catch (error) {
+          // Remove loading popup
+          if (loadingDiv && loadingDiv.parentElement) {
+            loadingDiv.remove();
+          }
+          
+          // Show error message
+          const errorDiv = document.createElement('div');
+          errorDiv.className = 'status-popup';
+          errorDiv.innerHTML = `
+            <div class="status-popup-content">
+              <div class="error-icon">
+                <i class="fas fa-times-circle"></i>
+              </div>
+              <h3 class="status-title">Submission Failed</h3>
+              <p>We encountered an error while processing your order.</p>
+              <p style="font-size: 14px; color: #666; margin-top: 10px;">
+                Error: ${error.message}
+              </p>
+              <p style="font-size: 12px; color: #666;">
+                Please try again or contact us at info.dentnord@gmail.com if the problem persists.
+              </p>
+              <button class="status-close-btn">Close</button>
+            </div>`;
+          document.body.appendChild(errorDiv);
+          
+          errorDiv.querySelector('.status-close-btn').addEventListener('click', () => {
+            errorDiv.remove();
+          });
+        }
       });
 
-      form.reset();
-      const fileInfo = form.querySelector('.file-upload p');
-      if(fileInfo) {
-        fileInfo.innerHTML = 'Click to upload or drag and drop';
-        fileInfo.style.color = '#666';
-        fileInfo.style.whiteSpace = 'normal';
-      }
-
-    } catch (error) {
-      console.error('Error:', error);
-      if (loadingDiv) loadingDiv.remove();
-
-      // Show error message
-      const errorDiv = document.createElement('div');
-      errorDiv.className = 'status-popup';
-      errorDiv.innerHTML = `
-        <div class="status-popup-content">
-            <div class="error-icon">
-              <i class="fas fa-times-circle"></i>
-            </div>
-            <h3 class="status-title">Upload Failed</h3>
-            <p>An error occurred: ${error.message}</p>
-            <p style="font-size: 12px; color: #666;">Please try again or contact support if the problem persists.</p>
-            <button class="status-close-btn">Close</button>
-        </div>`;
-      document.body.appendChild(errorDiv);
-      errorDiv.querySelector('.status-close-btn').addEventListener('click', () => {
-        errorDiv.remove();
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          if (targetId && targetId !== '#') {
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+              targetElement.scrollIntoView({
+                behavior: 'smooth'
+              });
+            }
+          }
+        });
       });
-    } finally {
-      submitButton.disabled = false;
-    }
-  });
-}
-</script>
+    });
+  </script>
 
 </body>
 </html>
