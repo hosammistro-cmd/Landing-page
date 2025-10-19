@@ -643,18 +643,25 @@
     
     .checkbox-group input {
       margin-right: 10px;
+      cursor: pointer;
+    }
+    
+    .checkbox-group label {
+      cursor: pointer;
+      margin-bottom: 0;
     }
     
     .checkbox-horizontal {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       margin-top: 10px;
     }
     
     .checkbox-horizontal .checkbox-group {
-      flex: 0 0 calc(33.333% - 20px);
-      margin-bottom: 15px;
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
     }
     
     /* Teeth Selection Styles */
@@ -782,8 +789,8 @@
         flex-direction: column;
       }
       
-      .checkbox-horizontal .checkbox-group {
-        flex: 0 0 100%;
+      .checkbox-horizontal {
+        grid-template-columns: 1fr;
       }
       
       .tooth {
@@ -797,6 +804,12 @@
       
       .tooth-label {
         font-size: 8px;
+      }
+    }
+    
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .checkbox-horizontal {
+        grid-template-columns: repeat(2, 1fr);
       }
     }
   </style>
@@ -960,7 +973,7 @@
   <section id="upload">
     <div class="container">
       <div class="order-form-container">
-        <h2 class="form-title">Order Smile in a Box</h2>
+        <h2 class="form-title">Order Form</h2>
         
         <form id="orderForm">
           <!-- Customer Information Section -->
