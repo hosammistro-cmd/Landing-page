@@ -739,7 +739,7 @@
         <p>Securely submit your dental scans and receive professional designs</p>
       </div>
       <div class="upload-container">
-        <form class="upload-form" id="uploadForm" action="https://script.google.com/macros/s/AKfycbz3RGdCE9cfSmBVU5cX7kCIoV7vOHgY0VdPo9EKNsH7KkiFB8-C999BZ71DIntFwnGn/exec" method="POST" enctype="multipart/form-data">
+        <form class="upload-form" id="uploadForm" action="https://207.154.244.220/api/upload" method="POST" enctype="multipart/form-data">
           <div class="form-group">
             <label for="doctor">Your Name</label>
             <input type="text" id="doctor" name="name" placeholder="Dr. John Smith" required>
@@ -754,6 +754,21 @@
           </div>
           <div class="form-group">
             <label for="service">Service Required</label>
+            <select id="service" name="service" multiple required style="min-height: 120px;">
+              <option value="">Select service(s) (hold Ctrl/Cmd to select multiple)</option>
+              <option value="crown">Crown Design</option>
+              <option value="bridge">Bridge Design</option>
+              <option value="implant-guide">Surgical Guide</option>
+              <option value="implant-planning">Implant Planning</option>
+              <option value="stackable-guides">Stackable Guides</option>
+              <option value="full-arch-bridges">Full Arch Bridges</option>
+              <option value="all-on-x">All on X Cases</option>
+              <option value="custom-trays">Custom Trays</option>
+              <option value="custom-healing-abutment">Custom Healing Abutment</option>
+              <option value="custom-abutment">Custom Abutment</option>
+              <option value="prosthetic">Prosthetic Design</option>
+              <option value="other">Other</option>
+            </select>
             <select id="service" name="service" required>
               <option value="">Select a service</option>
               <option value="crown">Crown Design</option>
