@@ -638,30 +638,41 @@
     .checkbox-group {
       display: flex;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: 0;
     }
     
     .checkbox-group input {
       margin-right: 10px;
       cursor: pointer;
+      width: 18px;
+      height: 18px;
     }
     
     .checkbox-group label {
       cursor: pointer;
       margin-bottom: 0;
+      font-size: 15px;
     }
     
     .checkbox-horizontal {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-top: 10px;
+      gap: 20px 30px;
+      margin-top: 15px;
+      align-items: start;
     }
     
     .checkbox-horizontal .checkbox-group {
       margin-bottom: 0;
       display: flex;
       align-items: center;
+      padding: 10px;
+      transition: background-color 0.2s;
+      border-radius: 4px;
+    }
+
+    .checkbox-horizontal .checkbox-group:hover {
+      background-color: #f8f9fa;
     }
     
     /* Teeth Selection Styles */
@@ -784,6 +795,13 @@
     }
     
     /* Responsive Styles for Order Form */
+    @media (max-width: 1024px) {
+      .checkbox-horizontal {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px 20px;
+      }
+    }
+
     @media (max-width: 768px) {
       .form-actions {
         flex-direction: column;
@@ -791,6 +809,7 @@
       
       .checkbox-horizontal {
         grid-template-columns: 1fr;
+        gap: 10px;
       }
       
       .tooth {
@@ -1011,8 +1030,8 @@
               </div>
               
               <div class="form-group">
-                <label for="clinicId">Clinic ID</label>
-                <input type="text" id="clinicId" class="form-control">
+                <label for="clinicAddress">Clinic Address</label>
+                <input type="text" id="clinicAddress" class="form-control">
               </div>
             </div>
           </div>
@@ -1036,10 +1055,7 @@
                   <input type="checkbox" id="surgical-guide" name="productType" value="surgical-guide">
                   <label for="surgical-guide">Surgical Guide</label>
                 </div>
-                <div class="checkbox-group">
-                  <input type="checkbox" id="implant" name="productType" value="implant">
-                  <label for="implant">Implant</label>
-                </div>
+                                </div>
                 <div class="checkbox-group">
                   <input type="checkbox" id="stackable-guides" name="productType" value="stackable-guides">
                   <label for="stackable-guides">Stackable Guides</label>
