@@ -1,0 +1,8 @@
+{
+  "name": "file-upload-app",
+  "version": "1.0.0",
+  "description": "File upload app with chunked uploads",
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  }
+}
