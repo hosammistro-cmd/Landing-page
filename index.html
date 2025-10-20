@@ -674,6 +674,11 @@
     .checkbox-horizontal .checkbox-group:hover {
       background-color: #f8f9fa;
     }
+
+    .checkbox-placeholder {
+      visibility: hidden;
+      pointer-events: none;
+    }
     
     /* Teeth Selection Styles */
     .teeth-selection {
@@ -1043,6 +1048,7 @@
             <div class="form-group">
               <label for="productType">Product Type *</label>
               <div class="checkbox-horizontal">
+                <!-- Row 1 -->
                 <div class="checkbox-group">
                   <input type="checkbox" id="crown" name="productType" value="crown">
                   <label for="crown">Crown</label>
@@ -1055,7 +1061,12 @@
                   <input type="checkbox" id="surgical-guide" name="productType" value="surgical-guide">
                   <label for="surgical-guide">Surgical Guide</label>
                 </div>
-                                </div>
+                
+                <!-- Row 2 -->
+                <div class="checkbox-group">
+                  <input type="checkbox" id="implant" name="productType" value="implant">
+                  <label for="implant">Implant</label>
+                </div>
                 <div class="checkbox-group">
                   <input type="checkbox" id="stackable-guides" name="productType" value="stackable-guides">
                   <label for="stackable-guides">Stackable Guides</label>
@@ -1064,6 +1075,8 @@
                   <input type="checkbox" id="all-on-x" name="productType" value="all-on-x">
                   <label for="all-on-x">All-on-X</label>
                 </div>
+                
+                <!-- Row 3 -->
                 <div class="checkbox-group">
                   <input type="checkbox" id="cases" name="productType" value="cases">
                   <label for="cases">Cases</label>
@@ -1076,6 +1089,8 @@
                   <input type="checkbox" id="custom-healing-abutment" name="productType" value="custom-healing-abutment">
                   <label for="custom-healing-abutment">Custom Healing Abutment</label>
                 </div>
+                
+                <!-- Row 4 -->
                 <div class="checkbox-group">
                   <input type="checkbox" id="custom-abutment" name="productType" value="custom-abutment">
                   <label for="custom-abutment">Custom Abutment</label>
@@ -1083,6 +1098,9 @@
                 <div class="checkbox-group">
                   <input type="checkbox" id="prosthetic-design" name="productType" value="prosthetic-design">
                   <label for="prosthetic-design">Prosthetic Design</label>
+                </div>
+                <div class="checkbox-group checkbox-placeholder">
+                  <!-- Empty placeholder for equal spacing -->
                 </div>
               </div>
             </div>
